@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller de Escritura - Redacción del Mito</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA (CON SCROLL INTERNO ESTABLE)
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 10px 45px; 
+            box-sizing: border-box;
+            height: calc(100vh - 190px); 
+            position: relative;
+        }
+
+        .envoltura-centrada {
+            margin: auto; 
+            width: 100%;
+            max-width: 900px;
+            height: 100%; 
+            display: flex;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* ==========================================================================
+           DISEÑO DEL FORMULARIO EDITORIAL (HOJA DE ESCRITURA)
+           ========================================================================== */
+        .contenedor-editorial-formulario {
+            position: relative;
+            width: 100%;
+            height: 96%; 
+        }
+
+        .trama-puntos-esquina {
+            position: absolute; top: -15px; left: -15px; width: 100px; height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-editorial {
+            position: absolute; 
+            top: 12px; 
+            left: 12px; 
+            width: 100%; 
+            height: 100%;
+            background-color: rgba(28, 78, 101, 0.1); 
+            border-radius: 0; 
+            z-index: 2;
+        }
+
+        .wrapper-formulario {
+            position: relative;
+            background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo);
+            border-top: 6px solid var(--color-petroleo); 
+            padding: 30px 40px;
+            box-sizing: border-box;
+            z-index: 5;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.05);
+            
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .wrapper-formulario::-webkit-scrollbar { width: 8px; }
+        .wrapper-formulario::-webkit-scrollbar-thumb { background: #b0c4cf; border-radius: 4px; }
+        .wrapper-formulario::-webkit-scrollbar-thumb:hover { background: var(--color-petroleo); }
+
+        .header-formulario {
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+            flex-shrink: 0;
+        }
+
+        .header-formulario h3 {
+            font-family: var(--fuente-titulos);
+            font-size: 1.3rem;
+            color: var(--color-petroleo);
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-formulario h3 svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: var(--color-coral);
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .header-formulario p {
+            font-family: var(--fuente-lectura);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* ==========================================================================
+           CAMPOS DE REDACCIÓN Y ANDAMIAJE DIDÁCTICO
+           ========================================================================== */
+        .grupo-input {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .etiqueta-didactica {
+            font-family: var(--fuente-lectura);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--color-petroleo);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .etiqueta-didactica svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--color-coral);
+            stroke-width: 2;
+            flex-shrink: 0;
+        }
+
+        .instruccion-breve {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: #666;
+            margin: -2px 0 4px 24px;
+            font-style: italic;
+            line-height: 1.3;
+        }
+
+        .textarea-editorial {
+            font-family: var(--fuente-lectura);
+            font-size: 1rem;
+            line-height: 1.5;
+            color: var(--color-texto-cuerpo);
+            padding: 15px;
+            border: 1px solid rgba(28, 78, 101, 0.2);
+            background-color: #FDFBF7;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .textarea-editorial:focus {
+            outline: none;
+            border-color: var(--color-coral);
+            background-color: var(--color-blanco);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        /* ==========================================================================
+           BOTONES DE NAVEGACIÓN Y DESCARGA
+           ========================================================================== */
+        .btn-descarga-word {
+            background-color: var(--color-coral);
+            color: var(--color-blanco);
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-descarga-word:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background-color: #ff5252;
+        }
+
+        .btn-descarga-word svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Paso 2: Escribir el Mito</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <div class="contenedor-editorial-formulario">
+                    <div class="trama-puntos-esquina"></div>
+                    <div class="offset-sombra-editorial"></div>
+                    
+                    <div class="wrapper-formulario">
+                        
+                        <div class="header-formulario">
+                            <h3>
+                                <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                Estructurá la aventura
+                            </h3>
+                            <p>Tus datos del héroe ya están descargados. Ahora utilizá la siguiente ficha para redactar tu mito. Recordá aplicar sustantivos y adjetivos para enriquecer tu relato. Luego, hace clic en el botón "Descargar Ficha"</p>
+                        </div>
+
+                        <!-- 1. SITUACIÓN INICIAL -->
+                        <div class="grupo-input">
+                            <label class="etiqueta-didactica">
+                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                1. Situación inicial (El mundo ordinario)
+                            </label>
+                            <p class="instruccion-breve">Contanos en qué lugar lejano se encuentra tu personaje y cómo es su vida antes de que empiece el problema.</p>
+                            <textarea id="textoInicio" class="textarea-editorial" placeholder="Hace muchísimo tiempo, en un lugar lejano..."></textarea>
+                        </div>
+
+                        <!-- 2. CONFLICTO -->
+                        <div class="grupo-input">
+                            <label class="etiqueta-didactica">
+                                <svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                                2. El conflicto (El llamado a la aventura)
+                            </label>
+                            <p class="instruccion-breve">¿Qué problema rompe la tranquilidad? ¿Qué monstruo, prueba o viaje peligroso debe enfrentar el héroe?</p>
+                            <textarea id="textoNudo" class="textarea-editorial" placeholder="De pronto, la tranquilidad se rompió cuando..."></textarea>
+                        </div>
+
+                        <!-- 3. DESENLACE -->
+                        <div class="grupo-input">
+                            <label class="etiqueta-didactica">
+                                <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 11"></polyline></svg>
+                                3. El desenlace (La transformación)
+                            </label>
+                            <p class="instruccion-breve">¿Cómo se resuelve la aventura? Escribí un final que explique el origen de algo nuevo en el mundo.</p>
+                            <textarea id="textoDesenlace" class="textarea-editorial" placeholder="Al finalizar la aventura, ocurrió algo increíble..."></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="pantalla11.html" class="btn-retroceso-sutil">← Volver a la Ficha del Personaje</a>
+            
+            <div style="display: flex; gap: 15px;">
+                <!-- Botón de Descarga del Mito -->
+                <button id="btnDescargarMito" class="btn-descarga-word">
+                    <svg viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM152,160a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,160Zm0-32a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,128ZM86.63,149.33a8,8,0,0,1-10.4-4.51L64.44,112.55,52.65,144.82a8,8,0,0,1-15-5.32l16.14-44.25a8,8,0,0,1-15,0L80.89,128l12-32.84a8,8,0,0,1,15,5.32l-16.14,44.25A8,8,0,0,1,86.63,149.33ZM216,104H112a8,8,0,0,1,0-16H216a8,8,0,0,1,0,16Z"></path></svg>
+                    Descargar Ficha
+                </button>
+                
+                <!-- NUEVO: Botón de Finalización con enlace a pantalla_cierre.html -->
+                <a href="pantalla_cierre.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Finalizar Recorrido →</a>
+            </div>
+        </nav>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnDescargar = document.getElementById('btnDescargarMito');
+
+            btnDescargar.addEventListener('click', () => {
+                const nombre = localStorage.getItem('heroe_nombre') || 'Héroe Desconocido';
+                const inicio = document.getElementById('textoInicio').value || '[No redactó la situación inicial]';
+                const nudo = document.getElementById('textoNudo').value || '[No redactó el conflicto]';
+                const desenlace = document.getElementById('textoDesenlace').value || '[No redactó el desenlace]';
+
+                const htmlContent = `
+                    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                    <head>
+                        <meta charset='utf-8'>
+                        <title>El Mito de ${nombre}</title>
+                        <style>
+                            body { font-family: 'Arial', sans-serif; color: #333; }
+                            h1 { color: #1C4E65; text-align: center; font-size: 24pt; border-bottom: 2px solid #1C4E65; padding-bottom: 10px; }
+                            h3 { color: #FF6B6B; font-size: 14pt; margin-top: 20px; }
+                            p { line-height: 1.5; font-size: 12pt; text-align: justify; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>El Mito de ${nombre}</h1>
+                        
+                        <h3>1. Situación Inicial</h3>
+                        <p>${inicio.replace(/\n/g, '<br>')}</p>
+                        
+                        <h3>2. El Conflicto</h3>
+                        <p>${nudo.replace(/\n/g, '<br>')}</p>
+                        
+                        <h3>3. El Desenlace</h3>
+                        <p>${desenlace.replace(/\n/g, '<br>')}</p>
+                    ` + `/body>
+                    ` + `/html>
+                `;
+
+                const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Mito_de_${nombre.replace(/\s+/g, '_')}.doc`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

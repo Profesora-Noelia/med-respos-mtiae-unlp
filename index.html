@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Portada</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ESTILOS ESPECÍFICOS DE LA PORTADA
+           ========================================================================== */
+        .layout-canvas-canva {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; 
+            height: 100%;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .bloque-textos-izq {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            padding: 60px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        .bloque-grafico-der {
+            position: relative;
+            background: linear-gradient(135deg, var(--color-petroleo) 0%, #0F2B37 100%);
+            clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            z-index: 3;
+        }
+
+        .tag-secuencia {
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-coral);
+            margin-bottom: 15px;
+        }
+
+        .textura-cuadricula-izq { position: absolute; top: 40px; left: 40px; width: 200px; height: 200px; opacity: 0.12; z-index: 1; pointer-events: none; }
+        .onda-decorativa-fondo { position: absolute; bottom: 0; left: 0; width: 60%; height: auto; fill: var(--color-hielo); opacity: 0.4; z-index: 1; pointer-events: none; }
+        .destello-estrella { position: absolute; fill: var(--color-coral); opacity: 0.7; animation: respiracionEstelar 3s infinite ease-in-out; }
+        
+        @keyframes respiracionEstelar {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.2); opacity: 0.9; }
+        }
+
+        /* ==========================================================================
+           CONTENEDOR DE PESTAÑAS (TABS SUPERIORES)
+           ========================================================================== */
+        .contenedor-tabs-superiores {
+            position: absolute;
+            top: 0;
+            left: 50px;
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .pestana-superior {
+            background-color: var(--color-petroleo);
+            color: var(--color-blanco);
+            padding: 10px 16px 14px 16px;
+            border-radius: 0 0 8px 8px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 4px 12px rgba(28, 78, 101, 0.15);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .pestana-superior:hover { transform: translateY(2px); background-color: var(--color-coral); }
+        .pestana-superior svg { width: 14px; height: 14px; fill: currentColor; }
+
+        /* ==========================================================================
+           MODALES BLINDADOS Y ENSANCHADOS (MÁS ANCHOS + FUENTE MÁS GRANDE)
+           ========================================================================== */
+        .modal-tarjeta {
+            background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo);
+            box-shadow: 12px 12px 0 rgba(28, 78, 101, 0.15);
+            position: relative;
+            max-height: 85vh; 
+            overflow-y: auto;  
+            box-sizing: border-box;
+        }
+
+        /* Modales ensanchados estratégicamente */
+        .modal-tarjeta.grande {
+            max-width: 750px; /* Antes 650px */
+            width: 90%;
+            padding: 40px;
+        }
+
+        .modal-tarjeta.extra-grande {
+            max-width: 950px; /* Antes 800px */
+            width: 92%;
+            padding: 45px;
+        }
+
+        /* FUENTES ENGRANDECIDAS PARA MÁXIMA LEGIBILIDAD */
+        .texto-introductorio-modal {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; /* Antes 0.95rem */
+            line-height: 1.55;
+            color: var(--color-texto-cuerpo);
+            margin: 0 0 20px 0;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        .bloque-aviso-editorial {
+            background-color: #FDFBF7;
+            border-left: 4px solid var(--color-coral);
+            padding: 15px 22px;
+            margin-bottom: 20px;
+            font-family: var(--fuente-lectura);
+            font-size: 1rem; /* Antes 0.9rem */
+            line-height: 1.45;
+            color: var(--color-texto-cuerpo);
+        }
+
+        .seccion-subtitulo-modal {
+            font-family: var(--fuente-titulos);
+            font-size: 1.25rem; /* Antes 1.1rem */
+            color: var(--color-petroleo);
+            margin: 25px 0 12px 0;
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.2);
+            padding-bottom: 6px;
+        }
+
+        .lista-destacada-sintetica {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .lista-destacada-sintetica li {
+            font-family: var(--fuente-lectura);
+            font-size: 1.02rem; /* Antes 0.92rem */
+            line-height: 1.5;
+            color: var(--color-texto-cuerpo);
+            margin-bottom: 12px;
+            padding-left: 28px;
+            position: relative;
+            text-align: justify;
+        }
+
+        .lista-destacada-sintetica li::before {
+            content: "✦";
+            position: absolute;
+            left: 4px;
+            top: 0;
+            color: var(--color-coral);
+            font-weight: bold;
+        }
+
+        /* Grilla de potencialidades transversales */
+        .tag-potencialidad-contenedor {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .tag-potencialidad {
+            background-color: var(--color-hielo);
+            color: var(--color-petroleo);
+            font-family: var(--fuente-lectura);
+            font-size: 0.88rem; /* Antes 0.8rem */
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 4px;
+            border: 1px solid rgba(28, 78, 101, 0.1);
+        }
+
+        /* ==========================================================================
+           OPTIMIZACIÓN DE CRUCECITAS (HIT AREA AGRANDADA PARA MEJOR CLIC)
+           ========================================================================== */
+        .btn-cerrar-modal { 
+            position: absolute; 
+            top: 15px; 
+            right: 15px; 
+            background: transparent; 
+            border: none; 
+            cursor: pointer; 
+            color: var(--color-petroleo); 
+            transition: all 0.2s ease;
+            padding: 12px; /* Área de impacto expandida para tablets y mouse */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100; /* Asegura estar por encima de todo */
+        }
+        
+        .btn-cerrar-modal:hover { 
+            color: var(--color-coral); 
+            transform: scale(1.15); /* Feedback visual sutil */
+        }
+        
+        .btn-cerrar-modal svg { 
+            width: 24px; 
+            height: 24px; 
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <!-- 4 Pestañas Superiores -->
+        <div class="contenedor-tabs-superiores">
+            <button class="pestana-superior btn-abrir-modal" data-target="modalDestinatarios">
+                <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h8V128h-8a8,8,0,0,1,0-16h16a8,8,0,0,1,8,8v40h8A8,8,0,0,1,144,176Zm-16-80a12,12,0,1,1,12-12A12,12,0,0,1,128,96Z"></path></svg>
+                Perfil destinatarios
+            </button>
+            <button class="pestana-superior btn-abrir-modal" data-target="modalContenidos">
+                <svg viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM88,112a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H80A8,8,0,0,1,88,112Zm0,48a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H80A8,8,0,0,1,88,160Zm112-48a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h64A8,8,0,0,1,200,112Zm0,48a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h64A8,8,0,0,1,200,160Z"></path></svg>
+                Contenidos
+            </button>
+            <button class="pestana-superior btn-abrir-modal" data-target="modalNavegacion">
+                <svg viewBox="0 0 256 256"><path d="M232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-104,80a76,76,0,1,0-76-76A76.08,76.08,0,0,0,128,208Zm49.77-104.66L143.51,154.51a15.82,15.82,0,0,1-6,6l-51.17,34.26a8,8,0,0,1-11.13-11.13l34.26-51.17a15.82,15.82,0,0,1,6-6l51.17-34.26a8,8,0,0,1,11.13,11.13ZM146,146l-28-42L76,132l42,28Z"></path></svg>
+                Navegación Didáctica
+            </button>
+            <button class="pestana-superior btn-abrir-modal" data-target="modalObjetivos">
+                <svg viewBox="0 0 256 256"><path d="M228.92,49.43a8,8,0,0,0-6.87-1.35L160.72,61.41,98.57,40.69a8,8,0,0,0-5.14,0L30.11,61.73A8,8,0,0,0,24,69.36V208a8,8,0,0,0,10.13,7.66l61.33-20.44,62.15,20.72a8,8,0,0,0,5.14,0l63.32-21.04A8,8,0,0,0,232,187.27V48A8,8,0,0,0,228.92,49.43ZM96,59.31l64,21.34v116l-64-21.34Z"></path></svg>
+                Objetivos y propósitos
+            </button>
+        </div>
+
+        <div class="layout-canvas-canva">
+            <svg class="textura-cuadricula-izq" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="gridLayout" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="var(--color-hielo)" /></pattern></defs><rect width="100" height="100" fill="url(#gridLayout)" /></svg>
+            <svg class="onda-decorativa-fondo" viewBox="0 0 200 100" preserveAspectRatio="none"><path d="M0,80 C50,100 70,60 120,80 C170,100 180,70 200,90 L200,100 L0,100 Z" /></svg>
+
+            <section class="bloque-textos-izq">
+                <span class="tag-secuencia">• • • • •</span>
+                <h1 style="font-family: var(--fuente-titulos); color: var(--color-petroleo); font-size: 3.5rem; margin: 0 0 20px 0; line-height: 1.1; font-weight: 700; letter-spacing: -1px;">
+                    La figura del héroe <br>en los mitos
+                </h1>
+                <p style="font-family: var(--fuente-lectura); font-size: 1.35rem; max-width: 520px; color: var(--color-texto-cuerpo); margin: 0 0 40px 0; line-height: 1.6; font-weight: 300;">
+                    Un recorrido interactivo para explorar los relatos de la antigüedad, descubrir a los héroes de la vida real y aprender herramientas para crear tu propio personaje.
+                </p>
+                <a href="pantalla1.html" class="btn-accion-coral" style="font-size: 1.15rem; padding: 16px 44px; font-weight: 600;">INGRESAR AL RECORRIDO →</a>
+            </section>
+            
+            <section class="bloque-grafico-der">
+                <!-- Misceláneas decorativas internas -->
+                <svg class="destello-estrella" style="top: 20%; right: 40%; width: 6px; height: 6px;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg class="destello-estrella" style="top: 65%; right: 20%; width: 8px; height: 8px; animation-delay: 1.5s;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg class="destello-estrella" style="top: 40%; right: 75%; width: 5px; height: 5px; animation-delay: 0.7s;" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50"/></svg>
+                <svg style="position: absolute; width: 100%; height: 100%; stroke: rgba(224, 234, 239, 0.15); stroke-width: 1;" fill="none"><line x1="50%" y1="20%" x2="80%" y2="40%" stroke-dasharray="4 4" /><line x1="80%" y1="40%" x2="25%" y2="65%" stroke-dasharray="4 4" /></svg>
+                <svg viewBox="0 0 100 180" style="width: 55%; height: auto; opacity: 0.22; fill: none; stroke: var(--color-blanco); stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round;">
+                    <rect x="15" y="15" width="70" height="8" rx="1" fill="rgba(255,255,255,0.05)" />
+                    <path d="M18,31 C25,31 28,23 23,19 C18,15 11,21 16,28 C20,33 35,33 35,33" />
+                    <path d="M82,31 C75,31 72,23 77,19 C82,15 89,21 84,28 C80,33 65,33 65,33" />
+                    <rect x="25" y="33" width="50" height="6" />
+                    <path d="M28,39 L28,155 M35,39 L35,155 M42,39 L42,155 M50,39 L50,155 M58,39 L58,155 M65,39 L65,155 M72,39 L72,155" opacity="0.7" />
+                    <line x1="25" y1="39" x2="25" y2="155" />
+                    <line x1="75" y1="39" x2="75" y2="155" />
+                    <path d="M22,155 L78,155 L82,165 L18,165 Z" fill="rgba(255,255,255,0.05)" />
+                    <rect x="12" y="165" width="76" height="8" rx="1" />
+                </svg>
+            </section>
+        </div>
+
+        <!-- ==========================================
+             MODAL 1: DESTINATARIOS (ENSANCHADO)
+             ========================================== -->
+        <div id="modalDestinatarios" class="modal-overlay">
+            <div class="modal-tarjeta grande">
+                <button class="btn-cerrar-modal btn-cerrar-accion" title="Cerrar ventana"><svg fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></button>
+                <div class="contenedor-bloque-dinamico bloque-petroleo">
+                    <div class="trama-puntos"></div>
+                    <div class="offset-sombra"></div>
+                    <article class="tarjeta-premium">
+                        <div class="sello-titulo"><svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h8V128h-8a8,8,0,0,1,0-16h16a8,8,0,0,1,8,8v40h8A8,8,0,0,1,144,176ZM116,96a12,12,0,1,1,12-12A12,12,0,0,1,116,96Z"></path></svg>Perfil Destinatarios</div>
+                        <ul class="lista-destacada-sintetica">
+                            <li><strong>Nivel Escolar:</strong> Segundo Ciclo de la Escuela Primaria.</li>
+                            <li><strong>Grados Sugeridos:</strong> 4.º, 5.º y 6.º grado.</li>
+                            <li><strong>Edad Cronológica Estimada:</strong> Entre los 9 y 12 años.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             MODAL 2: CONTENIDOS Y POTENCIALIDADES (ENSANCHADO)
+             ========================================== -->
+        <div id="modalContenidos" class="modal-overlay">
+            <div class="modal-tarjeta extra-grande">
+                <button class="btn-cerrar-modal btn-cerrar-accion" title="Cerrar ventana"><svg fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></button>
+                <div class="contenedor-bloque-dinamico bloque-coral">
+                    <div class="trama-puntos"></div>
+                    <div class="offset-sombra"></div>
+                    <article class="tarjeta-premium">
+                        <div class="sello-titulo"><svg viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM88,112a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H80A8,8,0,0,1,88,112Zm0,48a8,8,0,0,1-8,8H64a8,8,0,0,1,0-16H80A8,8,0,0,1,88,160Zm112-48a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h64A8,8,0,0,1,200,112Zm0,48a8,8,0,0,1-8,8H128a8,8,0,0,1,0-16h64A8,8,0,0,1,200,160Z"></path></svg>Contenidos Básicos del OA</div>
+                        <ul class="lista-destacada-sintetica">
+                            <li>Comprensión lectora, análisis narrativo y caracterización del héroe mítico.</li>
+                            <li>Identificación y uso funcional (semántico) de sustantivos y adjetivos calificativos.</li>
+                            <li>Taller de escritura: planificación y redacción guiada de textos de invención.</li>
+                        </ul>
+
+                        <div class="seccion-subtitulo-modal">✦ EXTRA: Potencialidades de Articulación Transversal</div>
+                        <p class="texto-introductorio-modal" style="margin-bottom: 5px;">
+                            Las temáticas de este Objeto de Aprendizaje permiten expandirse e integrar proyectos con las áreas de:
+                        </p>
+                        <div class="tag-potencialidad-contenedor">
+                            <span class="tag-potencialidad">Prácticas del Lenguaje</span>
+                            <span class="tag-potencialidad">Historia</span>
+                            <span class="tag-potencialidad">Geografía</span>
+                            <span class="tag-potencialidad">Organización de Civilizaciones</span>
+                            <span class="tag-potencialidad">Ciudadanía</span>
+                            <span class="tag-potencialidad">Convivencia Escolar</span>
+                            <span class="tag-potencialidad">Roles de Género en la Sociedad</span>
+                            <span class="tag-potencialidad">Sustentabilidad</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             MODAL 3: NAVEGACIÓN DIDÁCTICA (ENSANCHADO + GRANDES FUENTES)
+             ========================================== -->
+        <div id="modalNavegacion" class="modal-overlay">
+            <div class="modal-tarjeta extra-grande">
+                <button class="btn-cerrar-modal btn-cerrar-accion" title="Cerrar ventana"><svg fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></button>
+                <div class="contenedor-bloque-dinamico bloque-petroleo">
+                    <div class="trama-puntos"></div>
+                    <div class="offset-sombra"></div>
+                    <article class="tarjeta-premium">
+                        <div class="sello-titulo"><svg viewBox="0 0 256 256"><path d="M232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-104,80a76,76,0,1,0-76-76A76.08,76.08,0,0,0,128,208Zm49.77-104.66L143.51,154.51a15.82,15.82,0,0,1-6,6l-51.17,34.26a8,8,0,0,1-11.13-11.13l34.26-51.17a15.82,15.82,0,0,1,6-6l51.17-34.26a8,8,0,0,1,11.13,11.13ZM146,146l-28-42L76,132l42,28Z"></path></svg>Mapa de Ruta del Recorrido</div>
+                        
+                        <div class="bloque-aviso-editorial">
+                            <strong>Navegación Flexible:</strong> En las estaciones teóricas hay botones corales para abrir las actividades prácticas opcionales. El alumno puede resolverlas, ver su feedback pedagógico y volver mediante el botón de retroceso, o saltearlas y continuar la línea recta.
+                        </div>
+
+                        <ul class="lista-destacada-sintetica">
+                            <li><strong>Nivel 1: Ficción y Realidad (Análisis):</strong> Contraste entre héroes clásicos y cotidianos. Incluye el video de anclaje en la pantalla <em>Héroes con superpoderes y de la vida real</em> y da acceso a la Actividad 1.</li>
+                            <li><strong>Estructura del Relato (Monomito):</strong> Secuenciación narrativa. Contiene un video explicativo en la pantalla <em>El Camino del Héroe</em> y da acceso a la Actividad 2.</li>
+                            <li><strong>Nivel 2: Leer y Comparar (Biblioteca):</strong> Espacio interactivo de lectura autónoma en la pantalla <em>Biblioteca de Mitos</em> (Mitos Clásicos y Andinos).</li>
+                            <li><strong>Nivel 3: Herramientas de Escritura (Gramática):</strong> Función semántica. Contiene un video instructivo en la pantalla <em>Las herramientas de la descripción</em> y da acceso a la Actividad 3.</li>
+                        </ul>
+
+                        <div class="bloque-aviso-editorial" style="border-left-color: var(--color-petroleo); margin-top: 15px; margin-bottom: 0;">
+                            <strong>Criterio de Finalización:</strong> El recorrido interactivo concluye de forma obligatoria cuando el estudiante completa las dos instancias del Nivel 3 en el <strong>Taller de Escritura</strong> (Planificación y Redacción final de su mito).
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             MODAL 4: OBJETIVOS Y PROPÓSITOS (ENSANCHADO)
+             ========================================== -->
+        <div id="modalObjetivos" class="modal-overlay">
+            <div class="modal-tarjeta grande">
+                <button class="btn-cerrar-modal btn-cerrar-accion" title="Cerrar ventana"><svg fill="currentColor" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></button>
+                
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="contenedor-bloque-dinamico bloque-petroleo" style="margin-top: 0;">
+                        <div class="trama-puntos"></div>
+                        <div class="offset-sombra"></div>
+                        <article class="tarjeta-premium">
+                            <div class="sello-titulo"><svg viewBox="0 0 256 256"><path d="M228.92,49.43a8,8,0,0,0-6.87-1.35L160.72,61.41,98.57,40.69a8,8,0,0,0-5.14,0L30.11,61.73A8,8,0,0,0,24,69.36V208a8,8,0,0,0,10.13,7.66l61.33-20.44,62.15,20.72a8,8,0,0,0,5.14,0l63.32-21.04A8,8,0,0,0,232,187.27V48A8,8,0,0,0,228.92,49.43ZM96,59.31l64,21.34v116l-64-21.34Z"></path></svg>Objetivos</div>
+                            <ul class="lista-destacada-sintetica">
+                                <li>Reconocer y caracterizar la figura del héroe en los mitos.</li>
+                                <li>Identificar y aplicar sustantivos y adjetivos para describir.</li>
+                                <li>Planificar y producir un relato mitológico propio de invención.</li>
+                            </ul>
+                        </article>
+                    </div>
+
+                    <div class="contenedor-bloque-dinamico bloque-coral" style="margin-top: 0;">
+                        <div class="trama-puntos"></div>
+                        <div class="offset-sombra"></div>
+                        <article class="tarjeta-premium">
+                            <div class="sello-titulo"><svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm40-88a8,8,0,0,1-8,8H136v24a8,8,0,0,1-16,0V136H96a8,8,0,0,1,0-16h24V96a8,8,0,0,1,16,0v24h24A8,8,0,0,1,168,128Z"></path></svg>Propósitos</div>
+                            <ul class="lista-destacada-sintetica">
+                                <li>Promover el análisis literario crítico de narraciones clásicas.</li>
+                                <li>Favorecer la reflexión gramatical con un sentido práctico y creativo.</li>
+                            </ul>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const botonesAbrir = document.querySelectorAll('.btn-abrir-modal');
+            const botonesCerrar = document.querySelectorAll('.btn-cerrar-accion');
+            const modales = document.querySelectorAll('.modal-overlay');
+
+            botonesAbrir.forEach(boton => {
+                boton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = boton.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('activo');
+                });
+            });
+
+            botonesCerrar.forEach(boton => {
+                boton.addEventListener('click', (e) => {
+                    e.target.closest('.modal-overlay').classList.remove('activo');
+                });
+            });
+
+            modales.forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('activo');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script src="js/global.js"></script>
+</body>
+</html>

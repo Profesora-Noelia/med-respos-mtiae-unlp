@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller de Escritura - Creación del Héroe</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA (CON SCROLL INTERNO ESTABLE)
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 10px 45px; box-sizing: border-box; height: calc(100vh - 190px); position: relative;
+        }
+
+        .envoltura-centrada {
+            margin: auto; width: 100%; max-width: 900px; height: 100%; 
+            display: flex; align-items: center; position: relative; z-index: 10;
+        }
+
+        /* ==========================================================================
+           DISEÑO DEL FORMULARIO EDITORIAL (FICHA DE PERSONAJE)
+           ========================================================================== */
+        .contenedor-editorial-formulario { position: relative; width: 100%; height: 96%; }
+
+        .trama-puntos-esquina {
+            position: absolute; top: -15px; left: -15px; width: 100px; height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-editorial {
+            position: absolute; top: 12px; left: 12px; width: 100%; height: 100%;
+            background-color: rgba(28, 78, 101, 0.1); border-radius: 0; z-index: 2;
+        }
+
+        .wrapper-formulario {
+            position: relative; background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo); border-top: 6px solid var(--color-petroleo); 
+            padding: 30px 40px; box-sizing: border-box; z-index: 5;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.05);
+            display: flex; flex-direction: column; gap: 20px; height: 100%; overflow-y: auto;
+        }
+
+        .wrapper-formulario::-webkit-scrollbar { width: 8px; }
+        .wrapper-formulario::-webkit-scrollbar-thumb { background: #b0c4cf; border-radius: 4px; }
+        .wrapper-formulario::-webkit-scrollbar-thumb:hover { background: var(--color-petroleo); }
+
+        .header-formulario { border-bottom: 1px dashed rgba(28, 78, 101, 0.2); padding-bottom: 15px; margin-bottom: 5px; flex-shrink: 0; }
+        .header-formulario h3 { font-family: var(--fuente-titulos); font-size: 1.3rem; color: var(--color-petroleo); margin: 0 0 8px 0; display: flex; align-items: center; gap: 10px; }
+        .header-formulario h3 svg { width: 28px; height: 28px; fill: none; stroke: var(--color-coral); stroke-width: 2; flex-shrink: 0; }
+        .header-formulario p { font-family: var(--fuente-lectura); font-size: 0.95rem; line-height: 1.4; color: var(--color-texto-cuerpo); margin: 0; font-weight: 300; }
+
+        /* CAMPOS DEL FORMULARIO */
+        .fila-doble-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex-shrink: 0; }
+        .grupo-input { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+        .etiqueta-didactica { font-family: var(--fuente-lectura); font-size: 0.95rem; font-weight: 600; color: var(--color-petroleo); display: flex; align-items: center; gap: 6px; }
+        .etiqueta-didactica svg { width: 18px; height: 18px; fill: none; stroke: var(--color-coral); stroke-width: 2; flex-shrink: 0; }
+        .instruccion-breve { font-family: var(--fuente-lectura); font-size: 0.85rem; color: #666; margin: -2px 0 4px 24px; font-style: italic; line-height: 1.3; }
+
+        .input-editorial, .textarea-editorial { font-family: var(--fuente-lectura); font-size: 0.95rem; color: var(--color-texto-cuerpo); padding: 12px 15px; border: 1px solid rgba(28, 78, 101, 0.2); background-color: #FDFBF7; border-radius: 4px; transition: all 0.2s ease; width: 100%; box-sizing: border-box; }
+        .textarea-editorial { resize: vertical; min-height: 80px; }
+        .input-editorial:focus, .textarea-editorial:focus { outline: none; border-color: var(--color-coral); background-color: var(--color-blanco); box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1); }
+        .grilla-adjetivos { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 5px; }
+
+        /* BOTONES DE NAVEGACIÓN Y DESCARGA */
+        .btn-descarga-word { background-color: var(--color-coral); color: var(--color-blanco); font-family: var(--fuente-lectura); font-weight: 600; font-size: 0.95rem; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); }
+        .btn-descarga-word:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4); background-color: #ff5252; }
+        .btn-descarga-word svg { width: 18px; height: 18px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Paso 1: Ficha del Personaje</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <div class="contenedor-editorial-formulario">
+                    <div class="trama-puntos-esquina"></div>
+                    <div class="offset-sombra-editorial"></div>
+                    
+                    <form class="wrapper-formulario" id="formPersonaje">
+                        
+                        <div class="header-formulario">
+                            <h3>
+                                <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                Construye a tu héroe o heroína
+                            </h3>
+                            <p>Antes de lanzar a tu personaje a la aventura, necesitamos conocer su identidad. Completá esta ficha con los datos principales, luego hace clic en el botón "Descargar Ficha".</p>
+                        </div>
+
+                        <!-- FILA 1: Nombre y Origen -->
+                        <div class="fila-doble-inputs">
+                            <div class="grupo-input">
+                                <label class="etiqueta-didactica">
+                                    <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                    Nombre del personaje
+                                </label>
+                                <p class="instruccion-breve">Inventá un nombre original.</p>
+                                <input type="text" id="nombreHeroe" class="input-editorial" placeholder="Ej: Kaelen, Lyra, El Guardián..." required>
+                            </div>
+
+                            <div class="grupo-input">
+                                <label class="etiqueta-didactica">
+                                    <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                    Lugar de origen / Familia
+                                </label>
+                                <p class="instruccion-breve">¿De dónde viene o quiénes fueron sus antepasados?</p>
+                                <input type="text" id="origenHeroe" class="input-editorial" placeholder="Ej: Nacido en las montañas de..." required>
+                            </div>
+                        </div>
+
+                        <!-- FILA 2: Habilidad -->
+                        <div class="grupo-input">
+                            <label class="etiqueta-didactica">
+                                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                                ¿Qué lo hace especial?
+                            </label>
+                            <p class="instruccion-breve">Describí brevemente cuál es su habilidad única o su mayor motivación en la vida.</p>
+                            <textarea id="habilidadHeroe" class="textarea-editorial" placeholder="Ej: Tiene la capacidad de hablar con los animales y su mayor deseo es proteger el bosque." required></textarea>
+                        </div>
+
+                        <!-- FILA 3: Adjetivos -->
+                        <div class="grupo-input">
+                            <label class="etiqueta-didactica">
+                                <svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                                Definí su personalidad (Adjetivos Calificativos)
+                            </label>
+                            <p class="instruccion-breve">Elegí 3 adjetivos calificativos precisos para que los lectores puedan imaginar cómo es.</p>
+                            <div class="grilla-adjetivos">
+                                <input type="text" id="adj1" class="input-editorial" placeholder="Adjetivo 1" required>
+                                <input type="text" id="adj2" class="input-editorial" placeholder="Adjetivo 2" required>
+                                <input type="text" id="adj3" class="input-editorial" placeholder="Adjetivo 3" required>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla8.html" class="btn-retroceso-sutil">← Volver a las ayudas</a>
+            
+            <div style="display: flex; gap: 15px;">
+                <!-- Botón de Descarga Individual de la Ficha -->
+                <button type="button" id="btnDescargarFicha" class="btn-descarga-word">
+                    <svg viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM152,160a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,160Zm0-32a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,128ZM86.63,149.33a8,8,0,0,1-10.4-4.51L64.44,112.55,52.65,144.82a8,8,0,0,1-15-5.32l16.14-44.25a8,8,0,0,1,15,0L80.89,128l12-32.84a8,8,0,0,1,15,5.32l-16.14,44.25A8,8,0,0,1,86.63,149.33ZM216,104H112a8,8,0,0,1,0-16H216a8,8,0,0,1,0,16Z"></path></svg>
+                    Descargar Ficha
+                </button>
+
+                <!-- Botón Avanzar -->
+                <button id="btnAvanzar" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px; border: none; cursor: pointer; border-radius: 6px;">
+                    Siguiente: Armar la Historia →
+                </button>
+            </div>
+        </nav>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('formPersonaje');
+            const btnAvanzar = document.getElementById('btnAvanzar');
+            const btnDescargarFicha = document.getElementById('btnDescargarFicha');
+
+            if(localStorage.getItem('heroe_nombre')) {
+                document.getElementById('nombreHeroe').value = localStorage.getItem('heroe_nombre');
+                document.getElementById('origenHeroe').value = localStorage.getItem('heroe_origen');
+                document.getElementById('habilidadHeroe').value = localStorage.getItem('heroe_habilidad');
+                document.getElementById('adj1').value = localStorage.getItem('heroe_adj1');
+                document.getElementById('adj2').value = localStorage.getItem('heroe_adj2');
+                document.getElementById('adj3').value = localStorage.getItem('heroe_adj3');
+            }
+
+            btnDescargarFicha.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+
+                const nombre = document.getElementById('nombreHeroe').value;
+                const origen = document.getElementById('origenHeroe').value;
+                const habilidad = document.getElementById('habilidadHeroe').value;
+                const adjetivos = [
+                    document.getElementById('adj1').value, 
+                    document.getElementById('adj2').value, 
+                    document.getElementById('adj3').value
+                ].filter(Boolean).join(', ');
+
+                // El truco anti Live Server: concatenamos las etiquetas de cierre para que no las lea.
+                const htmlContent = `
+                    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                    <head>
+                        <meta charset='utf-8'><title>Ficha de Personaje</title>
+                        <style>
+                            body { font-family: 'Arial', sans-serif; color: #333; }
+                            h1 { color: #1C4E65; text-align: center; font-size: 24pt; border-bottom: 2px solid #1C4E65; padding-bottom: 10px; margin-bottom: 20px; }
+                            p { font-size: 12pt; line-height: 1.6; margin-bottom: 15px; }
+                            strong { color: #FF6B6B; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Ficha de Identidad del Héroe</h1>
+                        <p><strong>Nombre del Personaje:</strong> ${nombre}</p>
+                        <p><strong>Lugar de Origen / Familia:</strong> ${origen}</p>
+                        <p><strong>Personalidad (Adjetivos):</strong> ${adjetivos}</p>
+                        <p><strong>Habilidad o Motivación:</strong> ${habilidad.replace(/\n/g, '<br>')}</p>
+                    <` + `/body>
+                    <` + `/html>
+                `;
+
+                const blob = new Blob(['\ufeff', htmlContent], { type: 'application/msword' });
+                const url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(htmlContent);
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `Ficha_${nombre.replace(/\s+/g, '_')}.doc`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+
+            btnAvanzar.addEventListener('click', (e) => {
+                e.preventDefault();
+                if(!form.checkValidity()) { form.reportValidity(); return; }
+
+                localStorage.setItem('heroe_nombre', document.getElementById('nombreHeroe').value);
+                localStorage.setItem('heroe_origen', document.getElementById('origenHeroe').value);
+                localStorage.setItem('heroe_habilidad', document.getElementById('habilidadHeroe').value);
+                localStorage.setItem('heroe_adj1', document.getElementById('adj1').value);
+                localStorage.setItem('heroe_adj2', document.getElementById('adj2').value);
+                localStorage.setItem('heroe_adj3', document.getElementById('adj3').value);
+
+                window.location.href = 'pantalla11b.html';
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

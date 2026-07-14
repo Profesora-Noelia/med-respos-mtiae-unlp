@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Definición RAE</title>
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ESTILOS ESPECÍFICOS DE PANTALLA 2 (ESTILO HOJA DOBLADA)
+           ========================================================================== */
+        
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            padding: 5px 45px 5px 45px; 
+        }
+
+      
+
+        .parrafo-normal {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            line-height: 1.45; 
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* ==========================================================================
+           TARJETA DICCIONARIO
+           ========================================================================== */
+        .contenedor-editorial-rae { 
+            width: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            position: relative;
+        }
+
+        .tarjeta-diccionario-panoramica {
+            background-color: #FDFBF7; 
+            padding: 25px 35px 35px 35px; /* Aumentado el padding inferior para el sello */
+            position: relative;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.04);
+            background: linear-gradient(225deg, transparent 28px, #FDFBF7 0);
+            border-radius: 8px;
+        }
+
+        .tarjeta-diccionario-panoramica::before {
+            content: ""; position: absolute; top: 0; right: 0;
+            border-width: 0 40px 40px 0; border-style: solid;
+            border-color: var(--color-gris-fondo) var(--color-gris-fondo) #EAE5D9 #EAE5D9;
+            box-shadow: -3px 3px 6px rgba(0,0,0,0.03); border-bottom-left-radius: 6px;
+        }
+
+        .tarjeta-diccionario-panoramica::after {
+            content: ""; position: absolute; top: -5px; left: 45px;
+            width: 18px; height: 65px; background-color: var(--color-coral);
+            box-shadow: 2px 4px 8px rgba(0,0,0,0.1);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 85%, 0 100%);
+            z-index: 10;
+        }
+
+        .etimologia-linea { font-style: italic; color: #555555; font-size: 0.95rem; margin: 2px 0 12px 0; line-height: 1.3; padding-bottom: 8px; border-bottom: 1px solid rgba(28, 78, 101, 0.05); }
+        
+        .bloque-acepciones { display: flex; flex-direction: column; gap: 8px; padding-left: 10px; }
+        .renglon-rae { font-family: var(--fuente-lectura); font-size: 1rem; line-height: 1.4; margin: 0; color: var(--color-texto-cuerpo); padding-left: 22px; text-indent: -22px; }
+        mark { background-color: rgba(28, 78, 101, 0.08); padding: 1px 4px; border-radius: 4px; }
+
+        /* ==========================================================================
+           SELLO GRÁFICO (Estilo Aquiles - Pantalla 3)
+           ========================================================================== */
+        .sello-fuente-diccionario {
+            position: absolute;
+            bottom: -12px;
+            right: 35px; /* Ubicado a la derecha para equilibrar visualmente */
+            background-color: var(--color-blanco);
+            padding: 8px 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            z-index: 10;
+            font-family: var(--fuente-lectura);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-petroleo);
+            transform: rotate(-1.5deg); /* Rotación idéntica a la etiqueta de Aquiles */
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-left: 3px solid var(--color-coral);
+        }
+
+        .contenedor-pie-imagen { width: 100%; display: flex; justify-content: center; align-items: center; margin-top: auto; padding-top: 5px; }
+        .imagen-decorativa-pie { width: 100%; max-height: 65px; object-fit: contain; display: block; }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>¿Qué es un héroe?</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            
+            <div class="bloque-texto-intro">
+                <p class="parrafo-normal">
+                    Para empezar nuestro <strong>Nivel 1 (Investigar)</strong>, lo primero es ponernos de acuerdo sobre qué es un héroe o heroína. Si le preguntamos al diccionario oficial de nuestro idioma, la RAE, vas a notar que no menciona poderes mágicos ni capas voladoras. Mirá con atención sus diferentes acepciones:
+                </p>
+                <br>
+            </div>
+
+            <div class="contenedor-editorial-rae">
+                <article class="tarjeta-diccionario-panoramica">
+                    <h4 style="font-family: var(--fuente-titulos); font-size: 1.4rem; color: var(--color-petroleo); margin: 0; padding-left: 35px;">héroe, ína</h4>
+                    <p class="etimologia-linea" style="padding-left: 35px;">Del lat. heros, -ōis, y este del gr. ἥρως hḗrōs; la forma f., del gr. ἡρωΐνη hērōḯnē.</p>
+                    
+                    <div class="bloque-acepciones">
+                        <p class="renglon-rae"><strong>m. y f.</strong> Persona que realiza una acción muy abnegada en beneficio de una causa noble.</p>
+                        <p class="renglon-rae"><strong>m. y f.</strong> Persona ilustre y famosa por sus hazañas o virtudes.</p>
+                        <p class="renglon-rae"><strong>m. y f.</strong> En un poema o relato, personaje destacado que actúa de una manera valerosa y arriesgada.</p>
+                        <p class="renglon-rae"><strong>m. y f.</strong> Protagonista de una obra de ficción.</p>
+                        <p class="renglon-rae"><strong>m. y f.</strong> Persona a la que alguien convierte en objeto de su especial admiración.</p>
+                        <p class="renglon-rae"><strong>m. En la mitología antigua</strong>, hombre nacido de un dios o una diosa y de un ser humano, por lo cual era considerado más que hombre y menos que dios; p. ej., Hércules, Aquiles, Eneas, etc.</p>
+                    </div>
+                </article>
+            </div>
+
+            <div class="contenedor-pie-imagen">
+                <img src="assets/pie-pantalla1.png" alt="Diseño inferior" class="imagen-decorativa-pie" onerror="this.parentNode.style.display='none'">
+            </div>
+        </section>
+
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla1.html" class="btn-retroceso-sutil">← Volver</a>
+            <a href="pantalla3.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+
+    </main>
+
+    <script src="js/global.js"></script>
+</body>
+</html>

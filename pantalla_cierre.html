@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller de Escritura - Fin del Recorrido</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT PRINCIPAL DE LA PANTALLA
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            align-items: center; 
+            padding: 5px 45px; 
+            box-sizing: border-box;
+            height: calc(100vh - 190px);
+            position: relative;
+        }
+
+        .layout-revista {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; /* Texto más grande, Arte contenido */
+            gap: 50px; 
+            width: 100%;
+            max-width: 950px;
+            margin: auto;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           COLUMNA IZQUIERDA: MENSAJE DE CIERRE
+           ========================================================================== */
+        .bloque-texto-editorial {
+            display: flex;
+            flex-direction: column;
+            gap: 16px; 
+            position: relative;
+            background-color: var(--color-blanco);
+            padding: 35px 40px;
+            border-left: 5px solid var(--color-petroleo);
+            box-shadow: 0 8px 30px rgba(28, 78, 101, 0.05);
+        }
+
+        .trama-puntos-texto {
+            position: absolute; top: -15px; left: -15px; width: 80px; height: 80px;
+            background-image: radial-gradient(var(--color-hielo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.3; z-index: -1; pointer-events: none;
+        }
+
+        .parrafo-destacado {
+            font-family: var(--fuente-lectura);
+            font-size: 1.25rem; 
+            line-height: 1.45; 
+            color: var(--color-coral);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .parrafo-normal {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            line-height: 1.5; 
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+            text-align: justify;
+        }
+
+        .caja-recordatorio {
+            background-color: #FDFBF7;
+            border: 1px solid rgba(28, 78, 101, 0.15);
+            padding: 12px 18px;
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-top: 5px;
+            border-left: 4px solid var(--color-coral);
+        }
+
+        .caja-recordatorio svg {
+            width: 24px; height: 24px; fill: none; stroke: var(--color-coral); stroke-width: 2; flex-shrink: 0; margin-top: 2px;
+        }
+
+        .caja-recordatorio p {
+            font-family: var(--fuente-lectura); font-size: 0.95rem; line-height: 1.4; color: var(--color-petroleo); margin: 0; font-weight: 400;
+        }
+
+        /* ==========================================================================
+           COLUMNA DERECHA: ARTE VECTORIAL (TROFEO/ESTRELLA)
+           ========================================================================== */
+        .columna-arte {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .contenedor-ilustracion {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .trama-puntos-arte {
+            position: absolute; bottom: -15px; left: -15px;
+            width: 100px; height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1;
+        }
+
+        .offset-sombra-coral {
+            position: absolute; top: 12px; right: -12px;
+            width: 100%; height: 100%;
+            background-color: rgba(255, 107, 107, 0.12); 
+            border-radius: 0; z-index: 2;
+        }
+
+        .wrapper-grafico {
+            position: relative; width: 100%; aspect-ratio: 1 / 1.15;
+            border: 4px solid var(--color-blanco);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); z-index: 5;
+            transform: rotate(-1.5deg); background-color: #F8F5F0; 
+            display: flex; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
+            border-top: 6px solid var(--color-petroleo);
+        }
+
+        .svg-mito { width: 95%; height: auto; }
+        
+        .estrella-mito { transform-origin: center; animation: titilar 2.5s infinite alternate ease-in-out; }
+        .estrella-mito:nth-child(2) { animation-delay: 0.8s; }
+        .estrella-mito:nth-child(3) { animation-delay: 1.5s; }
+        @keyframes titilar { 0% { opacity: 0.3; transform: scale(0.8) rotate(0deg); } 100% { opacity: 1; transform: scale(1.15) rotate(15deg); } }
+
+        .sello-grafico {
+            position: absolute; top: -12px; right: -15px;
+            background-color: var(--color-coral); padding: 8px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 10;
+            font-family: var(--fuente-lectura); font-size: 0.75rem;
+            font-weight: 600; color: var(--color-blanco);
+            transform: rotate(4deg); display: flex; align-items: center; gap: 6px;
+        }
+
+        /* Botón de acción final (Directo al inicio) */
+        .btn-accion-final {
+            background-color: var(--color-petroleo); color: var(--color-blanco);
+            font-family: var(--fuente-lectura); font-weight: 600; font-size: 1.05rem; text-decoration: none;
+            border: none; padding: 15px 35px; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; box-shadow: 0 6px 15px rgba(28, 78, 101, 0.2);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .btn-accion-final:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(28, 78, 101, 0.3); background-color: #123648; }
+        .btn-accion-final svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>¡Misión Cumplida!</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="layout-revista">
+                
+                <!-- COLUMNA IZQUIERDA: MENSAJE INTEGRADO -->
+                <div class="bloque-texto-editorial">
+                    <div class="trama-puntos-texto"></div>
+                    <p class="parrafo-destacado">
+                        ¡Felicitaciones! Acabás de completar con éxito el Nivel 3.
+                    </p>
+                    <p class="parrafo-normal">
+                        A lo largo de este recorrido, descubriste la estructura oculta detrás de los mitos y dominaste las herramientas semánticas para crear tus propios mundos. Al inventar tu héroe y redactar su aventura, demostraste que la imaginación combinada con la escritura es un poder increíble.
+                    </p>
+                    
+                    <!-- Recordatorio integrado visualmente -->
+                    <div class="caja-recordatorio">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                        <p><strong>Antes de irte:</strong> Asegurate de haber descargado tus archivos Word en la pantalla anterior para poder compartirlos y evaluarlos en clase.</p>
+                    </div>
+                </div>
+
+                <!-- COLUMNA DERECHA: ARTE VECTORIAL -->
+                <aside class="columna-arte">
+                    <div class="contenedor-ilustracion">
+                        <div class="trama-puntos-arte"></div>
+                        <div class="offset-sombra-coral"></div>
+                        <div class="wrapper-grafico">
+                            <div class="sello-grafico">
+                                <svg width="14" height="14" viewBox="0 0 256 256" fill="currentColor"><path d="M234.33,70.51,185.49,21.67a8,8,0,0,0-11.32,0l-96,96a8,8,0,0,0,0,11.32l48.84,48.84L51.31,253.52a8,8,0,0,1-11.32,0L3.33,216.85a8,8,0,0,1,0-11.32l75.69-75.7-48.84-48.84a8,8,0,0,1,0-11.32l96-96a8,8,0,0,1,11.32,0l48.84,48.84,75.7-75.69a8,8,0,0,1,11.32,0l36.67,36.67a8,8,0,0,1,0,11.32Zm-11.32-8L197.66,37.16l-70,70a8,8,0,0,1-11.32,0l-43.19-43.18-84.69,84.68,43.18,43.19a8,8,0,0,1,0,11.32l-70,70L25.34,208.84l70-70a8,8,0,0,1,11.32,0l43.19,43.18L234.52,97.34l-43.18-43.19A8,8,0,0,1,191.34,42.83l70-70Z"></path></svg>
+                                Obra finalizada
+                            </div>
+                            
+                            <!-- ILUSTRACIÓN VECTORIAL: TROFEO DEL HÉROE -->
+                            <svg class="svg-mito" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                                <g fill="var(--color-coral)">
+                                    <path class="estrella-mito" d="M30,30 L34,45 L49,49 L34,53 L30,68 L26,53 L11,49 L26,45 Z" />
+                                    <path class="estrella-mito" d="M160,20 L163,30 L173,33 L163,36 L160,46 L157,36 L147,33 L157,30 Z" />
+                                    <path class="estrella-mito" d="M165,110 L167,117 L174,119 L167,121 L165,128 L163,121 L156,119 L163,117 Z" />
+                                    <path class="estrella-mito" d="M40,160 L42,165 L47,167 L42,169 L40,174 L38,169 L33,167 L38,165 Z" />
+                                </g>
+                                
+                                <g transform="translate(100, 110)">
+                                    <path d="M-30,100 L30,100 L20,85 L-20,85 Z" fill="var(--color-petroleo)" />
+                                    <rect x="-8" y="45" width="16" height="40" fill="var(--color-petroleo)" />
+                                    <path d="M-20,45 L20,45 L10,30 L-10,30 Z" fill="var(--color-petroleo)" />
+                                    
+                                    <path d="M-60,-40 C-60,10 -30,30 0,30 C30,30 60,10 60,-40 Z" fill="var(--color-petroleo)" />
+                                    <path d="M-50,-40 C-50,0 -20,20 0,20 C20,20 50,0 50,-40 Z" fill="#F8F5F0" />
+                                    <path d="M-40,-40 C-40,-10 -15,10 0,10 C15,10 40,-10 40,-40 Z" fill="var(--color-petroleo)" />
+                                    
+                                    <path d="M-60,-20 C-85,-20 -85,15 -45,15" fill="none" stroke="var(--color-petroleo)" stroke-width="6" stroke-linecap="round"/>
+                                    <path d="M60,-20 C85,-20 85,15 45,15" fill="none" stroke="var(--color-petroleo)" stroke-width="6" stroke-linecap="round"/>
+                                    
+                                    <path d="M-5,-50 C-20,-70 10,-90 0,-115 C15,-95 25,-75 5,-50" fill="var(--color-coral)" opacity="0.9"/>
+                                    <path d="M3,-55 C-5,-70 12,-80 5,-95 C12,-85 15,-75 3,-55" fill="#F8F5F0" opacity="0.8"/>
+                                </g>
+                                
+                                <line x1="30" y1="215" x2="170" y2="215" stroke="var(--color-petroleo)" stroke-width="4" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL: Botón único directo al inicio -->
+        <nav class="barra-navegacion-fija" style="justify-content: flex-end;">
+            <a href="index.html" class="btn-accion-final">
+                Cerrar y Salir
+                <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"></path></svg>
+            </a>
+        </nav>
+
+    </main>
+    <script src="js/global.js"></script>
+</body>
+</html>

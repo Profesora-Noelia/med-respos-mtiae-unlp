@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Los sentidos del Mito</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           AJUSTES DE CONTENEDOR PARA EVITAR OVERFLOW
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Permite que el contenido fluya hacia abajo */
+            padding: 20px 40px; 
+            box-sizing: border-box;
+            min-height: calc(100vh - 120px); /* Altura mínima flexible */
+            height: auto; 
+        }
+
+        /* Título integrado al flujo (no superpuesto) */
+        .encabezado-estatico {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .encabezado-estatico h2 {
+            font-family: var(--fuente-titulos);
+            font-size: 2.2rem;
+            color: var(--color-petroleo);
+            margin: 0;
+        }
+
+        /* ==========================================================================
+           CONTENEDOR DECORADO DEL CARRUSEL
+           ========================================================================== */
+        .contenedor-carrusel-decorado {
+            position: relative;
+            width: 100%;
+            max-width: 950px; 
+            margin: 0 auto;
+        }
+
+        .trama-puntos-arte {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 90px;
+            height: 90px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .offset-sombra-coral {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 107, 107, 0.12); 
+            border-radius: 10px;
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           SISTEMA DE CARRUSEL CUSTOM
+           ========================================================================== */
+        .contenedor-carrusel-maestro {
+            position: relative;
+            width: 100%;
+            background-color: var(--color-blanco);
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.08);
+            overflow: hidden;
+            border: 4px solid var(--color-blanco); 
+            z-index: 5; 
+        }
+
+        .carrusel-track {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        .carrusel-slide {
+            min-width: 100%;
+            padding: 35px 75px 25px 75px; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Contenido de los Slides */
+        .slide-texto {
+            width: 100%;
+            max-width: 820px;
+        }
+
+        .texto-destacado-color {
+            font-family: var(--fuente-lectura);
+            font-size: 1.15rem; 
+            color: var(--color-petroleo);
+            font-weight: 600;
+            text-align: justify;
+            margin: 0 0 15px 0;
+            line-height: 1.4;
+        }
+
+        .slide-parrafo {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            line-height: 1.5;
+            color: var(--color-texto-cuerpo);
+            margin-bottom: 15px;
+            font-weight: 300;
+            text-align: justify; 
+        }
+
+        /* Distribución en 2 columnas para aprovechar el ancho */
+        .contenedor-columnas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .slide-cita {
+            font-family: var(--fuente-lectura);
+            font-size: 0.95rem; 
+            line-height: 1.45;
+            color: #222222; 
+            background-color: var(--color-hielo);
+            padding: 15px 20px;
+            border-left: 3px solid var(--color-coral);
+            border-radius: 0 4px 4px 0;
+            text-align: justify; 
+            margin-bottom: 15px;
+        }
+
+        .slide-cita strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--color-petroleo);
+        }
+
+        .cita-fuente {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: #666; 
+            margin-top: 15px;
+            text-align: left;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        /* ==========================================================================
+           DISEÑO DEL VIDEO
+           ========================================================================== */
+        .contenedor-video-dinamico {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .wrapper-video-presentacion {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 6px;
+            border: 4px solid var(--color-blanco);
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transform: rotate(0.5deg);
+            z-index: 5;
+        }
+
+        .wrapper-video-presentacion iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .trama-video {
+            position: absolute; top: -12px; left: -12px;
+            width: 80px; height: 80px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1;
+        }
+
+        .sombra-video {
+            position: absolute; top: 10px; right: -10px;
+            width: 100%; height: 100%;
+            background-color: rgba(255, 107, 107, 0.12);
+            border-radius: 8px; z-index: 2;
+        }
+
+        /* ==========================================================================
+           CONTROLES DEL CARRUSEL
+           ========================================================================== */
+        .btn-carrusel {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-coral);
+            z-index: 10;
+            padding: 10px;
+            transition: color 0.2s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-carrusel:hover {
+            color: var(--color-petroleo);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .btn-carrusel:disabled {
+            color: var(--color-hielo);
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(1);
+        }
+
+        .btn-prev { left: 5px; }
+        .btn-next { right: 5px; }
+
+        .btn-carrusel svg {
+            width: 42px;
+            height: 42px;
+            fill: currentColor;
+        }
+
+        .carrusel-indicadores {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 0 20px 0;
+            background-color: var(--color-blanco);
+        }
+
+        .indicador-punto {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--color-hielo);
+            transition: background-color 0.3s;
+        }
+
+        .indicador-punto.activo {
+            background-color: var(--color-petroleo);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <section class="zona-contenido-fija">
+            
+        
+
+            <div class="contenedor-carrusel-decorado">
+                <div class="trama-puntos-arte"></div>
+                <div class="offset-sombra-coral"></div>
+                
+                <div class="contenedor-carrusel-maestro">
+                    
+                    <button class="btn-carrusel btn-prev" id="btnPrev" disabled aria-label="Slide anterior">
+                        <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm32-88a8,8,0,0,1-8,8H115.31l18.35,18.34a8,8,0,0,1-11.32,11.32l-32-32a8,8,0,0,1,0-11.32l32-32a8,8,0,0,1,11.32,11.32L115.31,120H152A8,8,0,0,1,160,128Z"></path></svg>
+                    </button>
+
+                    <div class="carrusel-track" id="track">
+                        
+                        <!-- SLIDE 1: Parte 1 (Diccionarios) -->
+                        <div class="carrusel-slide">
+                            <div class="slide-texto">
+                                <p class="texto-destacado-color">¿Qué es un mito para ustedes? ¿Con qué significado o significados usan la palabra “mito”?</p>
+                                <p class="slide-parrafo">Hoy en día, en nuestra cultura, cuando una persona caracteriza a otra como un mito, lo hace para destacar sus aspectos extraordinarios. Por el contrario, cuando se dice que un relato es un mito, generalmente se da por sentado que se trata de una invención o una mentira. Los diccionarios recogen este segundo uso del término:</p>
+                                
+                                <div class="contenedor-columnas">
+                                    <div class="slide-cita">
+                                        Mito [...] 2. m. Relato o noticia que desfigura lo que realmente es una cosa y le da apariencia de ser más valiosa o más atractiva.<br>
+                                        <strong>Real Academia Española, Diccionario de la Lengua Española (1992).</strong>
+                                    </div>
+                                    <div class="slide-cita">
+                                        Mito [...] 2. (n. calif.; fig. e inf.) Cosa inventada por alguien, que intenta hacerla pasar por verdad, o cosa que no existe más que en la fantasía de alguien.<br>
+                                        <strong>María Moliner, Diccionario de uso del español (1992).</strong>
+                                    </div>
+                                </div>
+                                
+                                <p class="slide-parrafo" style="text-align: justify; font-weight: 600; color: var(--color-petroleo);">Sin embargo, para el grupo humano que lo creó, un mito es un relato verdadero, sagrado y ejemplar.</p>
+                            </div>
+                        </div>
+
+                        <!-- SLIDE 2: Parte 2 (Zayas) -->
+                        <div class="carrusel-slide">
+                            <div class="slide-texto">
+                                <p class="texto-destacado-color">¿Qué vinculaciones pueden encontrar entre los siguientes fragmentos y las tres acepciones de la palabra “mito” mencionadas arriba?</p>
+                                
+                                <div class="slide-cita">
+                                    Entre los mitos populares más difundidos, no solo en la Argentina sino en varios países latinoamericanos, el de Carlos Gardel ocupa un lugar especial. Hoy, a sesenta años de su muerte, es tema de tapa de los principales diarios (“Carlitos no se rinde”, Clarín, 25-06-1995), aunque para los jóvenes ya no constituya un referente de su identidad.<br><br>
+                                    Los dramaturgos lo han convocado en repetidas oportunidades porque su vida, además de “mágica”, se conecta con otros mitos identitarios: la madre, la amistad, la ciudad de Buenos Aires, el amigo del barrio, etc.<br>
+                                    <strong>P. Zayas, Presencia y función de los mitos en el teatro latinoamericano contemporáneo, 1996.</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SLIDE 3: Parte 2 (Eliade 1) -->
+                        <div class="carrusel-slide">
+                            <div class="slide-texto">
+                    
+                                
+                                <div class="slide-cita">
+                                    Los griegos fueron vaciando progresivamente al mitos de todo valor religioso o metafísico. [...] Mitos terminó por significar todo “lo que no puede existir en la realidad”.<br><br>
+                                    Por su parte, el judeocristianismo relegaba al dominio de la “mentira” y de la “ilusión” todo aquello que no estaba justificado o declarado válido por uno de los dos Testamentos.<br>
+                                    <strong>Mircea Eliade, Mito y realidad, 1992.</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SLIDE 4: Parte 3 (Eliade 2 + Referencia) -->
+                        <div class="carrusel-slide">
+                            <div class="slide-texto">
+                                <div class="slide-cita">
+                                    [...] el mito cuenta una historia sagrada; relata un acontecimiento que ha tenido lugar en el tiempo primordial, el tiempo fabuloso de los “comienzos”. Dicho de otro modo: el mito cuenta cómo, gracias a las hazañas de los Seres Sobrenaturales, una realidad ha venido a la existencia, sea esta la realidad total, el Cosmos, o solamente un fragmento: una isla, una especie vegetal, un comportamiento humano, una institución. [...] el mito se considera como una historia sagrada y, por tanto, una “historia verdadera”, puesto que se refiere siempre a realidades.
+                                    El mito cosmogónico es “verdadero”, porque la existencia del Mundo está ahí para probarlo; el mito del origen de la muerte es igualmente “verdadero”, puesto que la mortalidad del hombre lo prueba, y así sucesivamente.
+                                    <br>
+                                    <strong>Mircea Eliade, Mito y realidad, Barcelona, Labor, 1992.</strong>
+                                </div>
+
+                                <!-- Referencia bibliográfica solicitada -->
+                                <p class="cita-fuente">
+                                    Otañi, L., & Gaspar, M. del P. (2021, 16 de diciembre). La polisemia de la palabra mito [Libro electrónico]. Educ.ar. https://www.educ.ar/recursos/92252/la-polisemia-de-la-palabra-mito
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- SLIDE 5: Video Educ.ar -->
+                        <div class="carrusel-slide">
+                            <div class="slide-texto">
+                                <p class="texto-destacado-color">Descubriendo los Mitos</p>
+                                
+                                <!-- Video con diseño decorado -->
+                                <div class="contenedor-video-dinamico">
+                                    <div class="trama-video"></div>
+                                    <div class="sombra-video"></div>
+                                    <div class="wrapper-video-presentacion">
+                                        <iframe 
+                                            src="https://www.youtube.com/embed/iVFbLziZZKo?rel=0" 
+                                            title="Los mitos - Educ.ar" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+
+                                <p class="cita-fuente" style="text-align: center; border-top: none; padding-top: 0;">
+                                    Educ.ar Portal. (2021, 17 de noviembre). Los mitos [Video]. YouTube. https://www.youtube.com/watch?v=iVFbLziZZKo
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <button class="btn-carrusel btn-next" id="btnNext" aria-label="Siguiente slide">
+                        <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-93.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32-11.32L140.69,136H104a8,8,0,0,1,0-16h36.69l-10.35-10.34a8,8,0,0,1,11.32-11.32Z"></path></svg>
+                    </button>
+
+                    <div class="carrusel-indicadores" id="indicadores">
+                        <!-- 5 puntos para los 5 slides -->
+                        <div class="indicador-punto activo"></div>
+                        <div class="indicador-punto"></div>
+                        <div class="indicador-punto"></div>
+                        <div class="indicador-punto"></div>
+                        <div class="indicador-punto"></div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla6.html" class="btn-retroceso-sutil">← Volver</a>
+            <a href="pantalla7.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('track');
+            const btnPrev = document.getElementById('btnPrev');
+            const btnNext = document.getElementById('btnNext');
+            const puntos = document.querySelectorAll('.indicador-punto');
+            const slides = document.querySelectorAll('.carrusel-slide');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            const actualizarCarrusel = () => {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                btnPrev.disabled = currentIndex === 0;
+                btnNext.disabled = currentIndex === totalSlides - 1;
+
+                puntos.forEach((punto, index) => {
+                    if(index === currentIndex) {
+                        punto.classList.add('activo');
+                    } else {
+                        punto.classList.remove('activo');
+                    }
+                });
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    actualizarCarrusel();
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    actualizarCarrusel();
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

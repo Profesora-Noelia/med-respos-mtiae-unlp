@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mito de Kuniraya Wiracocha y Kawillaka - Libro Digital</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ENTORNO GLOBAL Y DECORACIÓN EDITORIAL (Estilo Andino/Tierra)
+           ========================================================================== */
+        .pantalla-lectura {
+            background-color: #EAE3D9; /* Tono cálido tipo arcilla/tela */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            overflow: hidden;
+            align-items: stretch !important; 
+            /* Patrón de tejido/chakana andina sutil en el fondo */
+            background-image: linear-gradient(45deg, rgba(139, 69, 19, 0.04) 25%, transparent 25%, transparent 75%, rgba(139, 69, 19, 0.04) 75%, rgba(139, 69, 19, 0.04)), 
+                              linear-gradient(45deg, rgba(139, 69, 19, 0.04) 25%, transparent 25%, transparent 75%, rgba(139, 69, 19, 0.04) 75%, rgba(139, 69, 19, 0.04));
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+        }
+
+        .pantalla-lectura::after {
+            content: "";
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid rgba(139, 69, 19, 0.2);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .barra-superior-lectura {
+            background-color: var(--color-blanco);
+            border-bottom: 3px double #8B4513; 
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(15, 43, 55, 0.06);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-regresar-galeria {
+            background-color: #8B4513;
+            color: var(--color-blanco);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 0;
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-regresar-galeria:hover {
+            background-color: var(--color-coral);
+        }
+
+        /* ==========================================================================
+           ZONA DEL LIBRO
+           ========================================================================== */
+        .zona-libro-interactivo {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            position: relative;
+            box-sizing: border-box;
+            height: calc(100vh - 120px); 
+            width: 100%;
+            z-index: 10;
+        }
+
+        .hoja-libro {
+            background-color: #FDFBF7; 
+            width: 100%;
+            max-width: 900px; 
+            flex-shrink: 0; 
+            height: 100%;
+            min-height: 480px; 
+            max-height: 580px; 
+            position: relative;
+            border: 1px solid #D3CCC0;
+            box-shadow: 10px 10px 0 rgba(139, 69, 19, 0.1); 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            z-index: 5;
+            perspective: 1200px; 
+        }
+
+        .hoja-libro::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 25px;
+            background: linear-gradient(to right, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.02) 50%, transparent 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .linea-lomo-central {
+            position: absolute;
+            top: 0; bottom: 0; left: 35px; width: 1px;
+            background-color: rgba(139, 69, 19, 0.2);
+            border-right: 1px solid var(--color-blanco);
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .libro-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        .pagina-cuento {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 35px 50px 35px 85px; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px) rotateY(-12deg); 
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+            backface-visibility: hidden;
+        }
+
+        .pagina-cuento.activa {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) rotateY(0deg);
+        }
+
+        .pagina-cuento.salida-atras {
+            transform: translateX(-40px) rotateY(12deg);
+            opacity: 0;
+        }
+
+        /* ==========================================================================
+           TIPOGRAFÍA EDITORIAL
+           ========================================================================== */
+        .titulo-pagina {
+            font-family: var(--fuente-titulos);
+            font-size: 1.65rem; 
+            color: #8B4513;
+            margin: 0 0 5px 0;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .subtitulo-pagina {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: var(--color-coral);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 15px 0; 
+            border-bottom: 1px solid rgba(255, 107, 107, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .prosa-paginada {
+            font-family: var(--fuente-lectura);
+            font-size: 1.15rem; 
+            line-height: 1.45; 
+            color: #2D2D2D;
+            text-align: justify; 
+            font-weight: 300;
+            flex-grow: 1;
+            overflow-y: hidden; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+        }
+
+        .prosa-paginada p {
+            margin: 0 0 10px 0; 
+        }
+
+        .capitular::first-letter {
+            font-family: var(--fuente-titulos);
+            font-size: 3rem; 
+            float: left;
+            margin: 8px 8px 0 0;
+            line-height: 0.8;
+            color: #8B4513;
+        }
+
+        /* ==========================================================================
+           CONTROLES INTERACTIVOS
+           ========================================================================== */
+        .btn-hoja {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-coral);
+            z-index: 50;
+            padding: 10px;
+            transition: color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 25px;
+            flex-shrink: 0;
+            background-color: var(--color-blanco);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .btn-hoja:hover {
+            color: #8B4513;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-hoja:disabled {
+            color: #D3CCC0;
+            background-color: transparent;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .btn-hoja svg {
+            width: 36px;
+            height: 36px;
+            fill: currentColor;
+        }
+
+        .contador-paginas {
+            position: absolute;
+            bottom: 15px;
+            right: 35px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: #8B4513;
+            font-weight: 600;
+            z-index: 30;
+            background-color: rgba(139, 69, 19, 0.08);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="pantalla-lectura">
+
+    <nav class="barra-superior-lectura">
+        <span style="font-family: var(--fuente-lectura); color: #8B4513; font-size: 0.9rem; font-weight: 600;">Biblioteca de Mitos - Lectura</span>
+        <a href="pantalla7.html" class="btn-regresar-galeria">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
+            Volver a la biblioteca
+        </a>
+    </nav>
+
+    <section class="zona-libro-interactivo">
+        
+        <button class="btn-hoja" id="backPage" disabled aria-label="Página anterior">
+            <svg viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path></svg>
+        </button>
+
+        <div class="hoja-libro">
+            <div class="linea-lomo-central"></div>
+            
+            <div class="libro-track">
+                
+                <!-- PÁGINA 1 -->
+                <div class="pagina-cuento activa">
+                    <h1 class="titulo-pagina">MITO DE KUNIRAYA WIRACOCHA</h1>
+                    <h2 class="subtitulo-pagina">Y KAWILLAKA</h2>
+                    <div class="prosa-paginada">
+                        <p class="capitular">Cuentan que en tiempos muy antiguos Kuniraya Wiracocha se convirtió en un hombre muy pobre, y andaba paseando con su ropa hecha harapos, y sin reconocerlo algunos hombres lo trataban de mendigo piojoso. Pero Kuniraya Wiracocha era el dios del campo. Con solo decirlo preparaba las chacras para el cultivo y reparaba los andenes. Con el solo hecho de arrojar una flor de cañaveral (llamada pupuna) hacía acequias desde sus fuentes. Así, por su gran poder, humillaba a los demás dioses (huacas) de la región.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 2 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Había una vez una mujer llamada Kawillaka, quien también era una huaca; que, por ser tan hermosa, todos los demás huacas la pretendían. Pero ella siempre los rechazaba. Sucedió que esta mujer, que nunca se había dejado tocar por un hombre, se encontraba tejiendo debajo de un árbol de lúcumo. Kuniraya, que la observaba de lejos, pensaba en una manera astuta de acercarse a la bella Kawillaka. Entonces se convirtió en un pájaro y voló hasta la copa del lúcumo, donde encontró una lúcuma madura a la que le introdujo su semen; luego, la hizo caer del árbol justo al costado de donde Kawillaka se encontraba tejiendo. Al verla, se la comió muy gustosa y de esta manera la bella diosa quedó embarazada sin haber tenido relaciones con ningún hombre.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 3 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>A los nueve meses, como era de esperarse, Kawi- llaka dio a luz. Durante más de un año crio sola a su hijo, pero siempre se interrogaba sobre quién sería el padre. Llamó a todos los huacas y huillcas a una reunión para dar respuesta a su pregunta. Cuando supieron de la reunión todos los huacas se alegraron mucho, asistieron muy finamente vestidos y arreglados, convencidos de ser a los que la bella Kawillaka elegiría. Esta reunión tuvo lugar en un pueblo llamado Anchicocha. Al llegar se fueron sentando, y la bella huaca les enseñaba a su hijo y les preguntaba si eran los padres. Pero nadie reconoció al niño. Kuniraya Wiracocha también había asistido, pero como estaba vestido como mendigo Kawillaka no le preguntó a él pues le parecía imposible que su hijo hubiese sido engendrado por aquel hombre pobre.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 4 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Ante la negativa de todos los preguntados de reconocer al niño, Kawillaka ideó posar en el piso al niño, dejando que ande a gatas solo hasta donde se encuentre su padre. Hizo así, y el niño se dirigió muy contento donde se encontraba Kuniraya Wiracocha. Cuando su madre lo vio, muy encolerizada, gritó: «Ay de mí!» Cómo habría podido yo dar a luz el hijo de un hombre tan miserable?». Y con estas palabras cogió a su hijo y corrió hacia el mar. Entonces Kuniraya dijo: «Ahora sí me va a amar!» y se vistió con un traje de oro, y la siguió, llamándola para que lo viera. Pero Kawillaka no volvió para mirarlo, siguió corriendo con la intención de arrojarse al mar por dar a luz el hijo de un hombre tan «horrible y sarnoso». Al llegar a la orilla, frente a Pachacámac, se arrojó y quedaron convertidos, ella y su hijo, en dos islotes que están muy cerca a la playa.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 5 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Como Kuniraya pensaba que Kawillaka voltearía a verlo, la seguía a distancia llamándola y gritándole continuamente. Entonces se encontró con un cóndor y le preguntó: -«Hermano, dónde te encontraste con esa mujer?»; «Aquí cerca está, ya casi la vas alcanzando», le respondió el cóndor. Por darle esa respuesta Kuniraya le dijo al cóndor: -«Siempre vivirás alimentándote con todos los animales de la puna, y cuando mueran tú sólo te los comerás, y si alguien te mata, él también morirá».</p>
+                        <p>El huaca siguió en su carrera en pos de Kawillaka, encontrándose con una zorrina. -«Hermana- le preguntó- «¿En dónde te has encontrado con esa mujer?»</p>
+                        <p>La zorrina le respondió: -«Ya no la alcanzarás, está muy lejos»-. Por darle esa mala noticia el huaca le dijo: -«Por lo que me has contado, te condeno a que camines solo de noche, odiada por los hombres y apestando horriblemente». Más abajo en su camino se encontró con un puma. -«Ella todavía anda por aquí; ya te estás acercando» -le dijo el puma-.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 6 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Por darle tan buenas noticias Kuniraya le respondió: -«Comerás las llamas del hombre culpable, y si alguien te mata te hará bailar primero en una gran fiesta, y todos los años te sacará sacrificándote una llama» (De este modo Kuniraya le confiere al puma categoría para ser adorado, y manda además que todos los años se celebre una fiesta en su honor, en la que se bailará y se sacrificará una llama en su honor). También se encontró con un zorro. Al preguntarle por Kawillaka el zorro le dijo que se encontraba ya muy lejos y que no la alcanzaría.</p>
+                        <p>Por esto le dijo al zorro: -«Aunque andes a distancia, los hombres llenos de odio te tratarán de zorro malvado y desgraciado. Y cuando te maten te botarán a ti y a tu piel como algo sin valor». El halcón, con quién también se encontró, le auguró que pronto la alcanzaría. Por ello le contestó el huaca: -«Tendrás mucha suerte, y cuando comas primero almorzarás picaflores. El hombre que te mate llorará tu muerte, y sacrificará una llama en tu honor, y bailará poniéndote sobre su cabeza para que resplandezcas allí».</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 7 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Enseguida se encontró con unos loros, quienes le dijeron que ya no la alcanzaría. Por ello Kuniraya les maldijo así: -«Andaréis gritando muy fuerte, y cuando los escuchen, sabiendo que tienen la y cuando los escuchen, sabiendo que tienen la intención de destruir los cultivos, sin tardar los hombres os ahuyentarán y habrán de vivir sufriendo mucho, odiados por ellos». De este modo, cada vez que se encontraba con alguien que le daba una buena noticia le auguraba un buen porvenir, y si se encontraba con alguien que le daba malas noticias lo maldecía. De este modo llegó hasta el mar donde se encontraban dos hijas de Pachacámac custodiadas por una serpiente. Pero poco antes, la madre de éstas: Urpayhuachac, había entrado al mar a visitar a Kawillaka. Aprovechando esta ausencia Kuniraya violó a la menor de las hijas. Cuando quiso hacer lo mismo con la otra, esta se transformó en paloma y voló. Es por esto que a su madre le llaman Urpayhuachac: «la que pare palomas».</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 8 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>En ese tiempo no habían peces en el agua. Solo Urpayhuachac los criaba en un estanque que estaba dentro de su casa. Kuniraya, enfadado porque había ido a visitar a Kawillaka, arrojó todos los peces del estanque al mar. Y es por esto que el mar, se encuentra poblado de peces. Cuando la hija menor de Ur- payhuachac le contó lo que Kuniraya le había hecho, se encolerizó y se decidió por matarlo. Para ello tramó un astuto plan. Urpayhuachac llamó a Kuniraya con el pretexto de quitarle las pulgas. Este aceptó. Pero al mismo tiempo hacía crecer una gran peña para que le cayera encima al huaca y lo aplastara.</p>
+                        <p>Pero este, con gran astucia, se dio cuenta de las verdaderas intenciones de Urpayhuachac, y huyó del lugar.</p>
+                        <p>Desde entonces Kuniraya Wiracocha anda por el mundo engañando a huacas y hombres.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="contador-paginas" id="pageIndicator">Pág. 1 de 8</div>
+        </div>
+
+        <button class="btn-hoja" id="nextPage" aria-label="Siguiente página">
+            <svg viewBox="0 0 256 256"><path d="M90.34,53.66a8,8,0,0,1,11.32-11.32l80,80a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32-11.32L164.69,128Z"></path></svg>
+        </button>
+
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const paginas = document.querySelectorAll('.pagina-cuento');
+            const btnPrev = document.getElementById('backPage');
+            const btnNext = document.getElementById('nextPage');
+            const indicador = document.getElementById('pageIndicator');
+            
+            let paginaActual = 0;
+            const totalPaginas = paginas.length;
+
+            const cambiarPagina = (nuevaPagina) => {
+                paginas[paginaActual].classList.remove('activa', 'salida-atras');
+                
+                if (nuevaPagina > paginaActual) {
+                    paginas[paginaActual].classList.add('salida-atras');
+                }
+
+                paginaActual = nuevaPagina;
+
+                paginas[paginaActual].classList.add('activa');
+                paginas[paginaActual].classList.remove('salida-atras');
+
+                btnPrev.disabled = paginaActual === 0;
+                btnNext.disabled = paginaActual === totalPaginas - 1;
+
+                indicador.textContent = `Pág. ${paginaActual + 1} de ${totalPaginas}`;
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (paginaActual < totalPaginas - 1) {
+                    cambiarPagina(paginaActual + 1);
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (paginaActual > 0) {
+                    cambiarPagina(paginaActual - 1);
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

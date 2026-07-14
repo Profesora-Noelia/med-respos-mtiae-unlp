@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - El Camino del Héroe</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA (CERO SCROLL VERTICAL)
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 5px 45px 5px 45px; 
+            box-sizing: border-box;
+        }
+
+        /* Hilo conductor */
+        .bloque-texto-original {
+            display: flex;
+            flex-direction: column;
+            gap: 6px; 
+            position: relative;
+            padding-left: 18px;
+        }
+
+    
+
+        .parrafo-normal {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            line-height: 1.4; 
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+            text-align: justify;
+        }
+
+        .layout-multimedia {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr; 
+            gap: 20px; 
+            width: 100%;
+            align-items: center;
+        }
+
+        /* ==========================================================================
+           DISEÑO DECORATIVO DEL VIDEO
+           ========================================================================== */
+        .columna-video {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px; 
+            width: 100%;
+        }
+
+        .contenedor-video-decorado {
+            position: relative;
+            width: 100%;
+            max-width: 420px; 
+        }
+
+        .trama-puntos {
+            position: absolute; top: -12px; left: -12px;
+            width: 80px; height: 80px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1;
+        }
+
+        .sombra-offset {
+            position: absolute; top: 10px; right: -10px;
+            width: 100%; height: 100%;
+            background-color: rgba(255, 107, 107, 0.12);
+            border-radius: 8px; z-index: 2;
+        }
+
+        .video-wrapper {
+            position: relative; width: 100%; aspect-ratio: 16 / 9;
+            background-color: #000; border: 4px solid var(--color-blanco);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-radius: 6px;
+            z-index: 5; transform: rotate(-0.5deg); overflow: hidden;
+        }
+
+        .video-wrapper iframe { width: 100%; height: 100%; border: none; display: block; }
+
+        .sello-video {
+            position: absolute; 
+            bottom: 5px; 
+            right: -8px;
+            background-color: var(--color-blanco); padding: 5px 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 10;
+            font-family: var(--fuente-lectura); font-size: 0.75rem; font-weight: 600;
+            color: var(--color-petroleo); transform: rotate(1.5deg);
+        }
+
+        /* ==========================================================================
+           DISEÑO DEL DIAGRAMA SVG 
+           ========================================================================== */
+        .columna-diagrama {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .contenedor-esquema-ciclo {
+            position: relative; width: 100%; max-width: 300px; aspect-ratio: 1 / 1; 
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        .svg-monomito { width: 100%; height: 100%; overflow: visible; }
+        .linea-ciclo { transform-origin: center; animation: rotarCiclo 40s linear infinite; }
+        @keyframes rotarCiclo { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        
+        .nodo-monomito { cursor: help; transition: transform 0.2s ease; transform-origin: center; }
+        .nodo-monomito:hover { transform: scale(1.15); }
+        .nodo-monomito:hover circle { fill: var(--color-coral); stroke: var(--color-blanco); stroke-width: 2; }
+        .nodo-monomito:hover text { fill: var(--color-coral); font-weight: 700; }
+
+        /* ==========================================================================
+           MODAL APP-LIKE 
+           ========================================================================== */
+        .modal-tarjeta.pantalla-completa { 
+            width: 90%; 
+            max-width: 850px; 
+            height: 85vh; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 30px 40px; 
+            text-align: left;
+            border-radius: 12px;
+        }
+
+        .header-modal-fijo { 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--color-hielo); 
+            flex-shrink: 0; 
+        }
+
+        .btn-cerrar-google {
+            background-color: transparent; color: var(--color-petroleo); border: none;
+            width: 40px; height: 40px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .btn-cerrar-google:hover { background-color: var(--color-hielo); }
+        .btn-cerrar-google svg { width: 24px; height: 24px; fill: currentColor; }
+
+        .modal-scroll-area { 
+            flex: 1; overflow-y: auto; padding-right: 20px; 
+            font-family: var(--fuente-lectura); line-height: 1.6; color: var(--color-texto-cuerpo); 
+            text-align: justify; font-weight: 300; font-size: 1.05rem;
+        }
+
+        .modal-scroll-area::-webkit-scrollbar { width: 6px; }
+        .modal-scroll-area::-webkit-scrollbar-thumb { background: #b0c4cf; border-radius: 10px; }
+        .modal-scroll-area::-webkit-scrollbar-thumb:hover { background: var(--color-petroleo); }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>El Camino del Héroe</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            
+            <!-- TEXTO REDUCIDO Y OPTIMIZADO PEDAGÓGICAMENTE -->
+            <div class="bloque-texto-editorial">
+                <p class="parrafo-normal">
+                    Ya descubrimos que el heroísmo real no necesita superpoderes. Pero, ¿qué pasa en la ficción y en los relatos más antiguos de la humanidad?
+                    Un investigador notó algo increíble: desde <em>Los Juegos del Hambre</em> hasta los mitos griegos, las grandes aventuras comparten una receta secreta llamada el <strong>"Viaje del Héroe"</strong>.
+                </p>
+                <br>
+            </div>
+            
+
+            <div class="layout-multimedia">
+                
+                <article class="columna-video">
+                    <div class="contenedor-video-decorado">
+                        <div class="trama-puntos"></div>
+                        <div class="sombra-offset"></div>
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/coA6Rl-MqME?rel=0" title="El viaje del héroe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="sello-video">▶ Recurso Audiovisual</div>
+                    </div>
+
+                    <button class="btn-accion-coral btn-abrir-modal" data-target="modalTranscripcion" style="padding: 10px 24px; font-size: 0.9rem;">
+                        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" style="margin-right: 8px; margin-top: -2px;"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM168,144a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,144Zm0-32a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,112Z"></path></svg>
+                        Leer transcripción del video
+                    </button>
+                </article>
+
+                <aside class="columna-diagrama">
+                    <div class="contenedor-esquema-ciclo">
+                        <svg class="svg-monomito" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="154" cy="154" r="90" fill="var(--color-hielo)" opacity="0.6" />
+                            <circle class="linea-ciclo" cx="150" cy="150" r="90" fill="none" stroke="var(--color-petroleo)" stroke-width="2.5" stroke-dasharray="8 6" opacity="0.5" />
+                            
+                            <line x1="20" y1="150" x2="280" y2="150" stroke="rgba(28, 78, 101, 0.15)" stroke-width="1.5" stroke-dasharray="4 4" />
+                            <text x="150" y="138" font-family="Lexend, sans-serif" font-size="10" fill="#555555" text-anchor="middle" font-weight="700" letter-spacing="0.5">MUNDO ORDINARIO</text>
+                            <text x="150" y="168" font-family="Lexend, sans-serif" font-size="10" fill="#555555" text-anchor="middle" font-weight="700" letter-spacing="0.5">MUNDO ESPECIAL</text>
+
+                            <g class="nodo-monomito" transform="translate(150, 60)">
+                                <circle cx="0" cy="0" r="14" fill="var(--color-petroleo)" />
+                                <text x="0" y="4" font-family="Lexend" font-size="11" fill="var(--color-blanco)" text-anchor="middle" font-weight="600">1</text>
+                                <text x="0" y="-20" font-family="Comfortaa" font-size="11" fill="var(--color-petroleo)" text-anchor="middle" font-weight="700">Status Quo</text>
+                            </g>
+                            <g class="nodo-monomito" transform="translate(240, 150)">
+                                <circle cx="0" cy="0" r="14" fill="var(--color-petroleo)" />
+                                <text x="0" y="4" font-family="Lexend" font-size="11" fill="var(--color-blanco)" text-anchor="middle" font-weight="600">2</text>
+                                <text x="22" y="4" font-family="Comfortaa" font-size="11" fill="var(--color-petroleo)" text-anchor="start" font-weight="700">Partida</text>
+                            </g>
+                            <g class="nodo-monomito" transform="translate(150, 240)">
+                                <circle cx="0" cy="0" r="14" fill="var(--color-petroleo)" />
+                                <text x="0" y="4" font-family="Lexend" font-size="11" fill="var(--color-blanco)" text-anchor="middle" font-weight="600">3</text>
+                                <text x="0" y="30" font-family="Comfortaa" font-size="11" fill="var(--color-petroleo)" text-anchor="middle" font-weight="700">La Crisis</text>
+                            </g>
+                            <g class="nodo-monomito" transform="translate(60, 150)">
+                                <circle cx="0" cy="0" r="14" fill="var(--color-petroleo)" />
+                                <text x="0" y="4" font-family="Lexend" font-size="11" fill="var(--color-blanco)" text-anchor="middle" font-weight="600">4</text>
+                                <text x="-22" y="4" font-family="Comfortaa" font-size="11" fill="var(--color-petroleo)" text-anchor="end" font-weight="700">Retorno</text>
+                            </g>
+                        </svg>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla4.html" class="btn-retroceso-sutil">← Volver</a>
+            <!-- El enlace avanza hacia la lectura de los mitos en la Pantalla 6 -->
+            <a href="pantalla6.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+
+        <!-- ==========================================
+             MODAL: TRANSCRIPCIÓN
+             ========================================== -->
+        <div id="modalTranscripcion" class="modal-overlay">
+            <div class="modal-tarjeta pantalla-completa">
+                
+                <div class="header-modal-fijo">
+                    <h4 style="font-family: var(--fuente-titulos); color: var(--color-petroleo); margin: 0; font-size: 1.4rem;">Transcripción del Video</h4>
+                    <button class="btn-cerrar-google btn-cerrar-modal-accion" title="Cerrar ventana">
+                        <svg viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="modal-scroll-area">
+                    <p style="margin-top: 0;">¿Qué tienen Harry Potter, Katniss Everdeen y Frodo en común con los héroes mitológicos? ¿Qué tal si les digo que todos son variantes del mismo héroe? ¿Lo creerían?</p>
+                    <p>Joseph Campbell lo creyó. Estudió mitos de todo el mundo y publicó un libro llamado <em>El héroe de las mil caras</em>, en el que recopila docenas de historias y explica cómo cada una representa el monomito, o el viaje del héroe.</p>
+                    <p><strong>¿Qué es, pues, el viaje del héroe?</strong> Piénsenlo como un ciclo. El viaje comienza y termina en el mundo ordinario del héroe, pero la búsqueda transcurre por un mundo desconocido y especial. En el camino hay varios sucesos cruciales. Piensen en su libro o película favorita. ¿Sigue este patrón?</p>
+                    
+                    <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 10px;">
+                        <li>Primero está el <strong>statu quo</strong>, el punto donde comienza la historia.</li>
+                        <li>Luego viene el <strong>llamado a la aventura</strong>. El héroe recibe un mensaje misterioso: una invitación, un reto o una misión.</li>
+                        <li>Después aparece la <strong>asistencia</strong>. El héroe necesita ayuda, quizá de alguien mayor o más sabio.</li>
+                        <li>A continuación llega la <strong>partida</strong>. El héroe cruza el umbral de su hogar, deja atrás su mundo seguro y entra en el mundo especial de la aventura. Ya no estamos en Kansas.</li>
+                        <li>Siguen las <strong>contiendas</strong>. Ser un héroe es un trabajo arduo. El protagonista resuelve un acertijo, derrota a un monstruo o escapa de una trampa.</li>
+                        <li>Luego ocurre el <strong>encuentro</strong>. Es el momento de afrontar la mayor prueba: el peor miedo del héroe.</li>
+                        <li>Después llega la <strong>crisis</strong>, la hora más oscura. El héroe se enfrenta a la muerte e incluso puede morir, solo para renacer.</li>
+                        <li>Como resultado obtiene el <strong>tesoro</strong>, que puede ser un objeto valioso, un reconocimiento especial o un nuevo poder.</li>
+                        <li>A continuación aparece el <strong>resultado</strong>. Este varía según la historia. Los monstruos pueden rendirse ante el héroe o perseguirlo mientras huye del mundo especial.</li>
+                        <li>Después viene el <strong>retorno</strong>. El héroe regresa a su mundo ordinario. Entonces comienza una vida nueva. La aventura lo ha transformado y ha dejado atrás su antigua forma de vivir.</li>
+                        <li>Llega la <strong>resolución</strong>, en la que todos los conflictos de la historia encuentran respuesta.</li>
+                        <li>Finalmente aparece un nuevo <strong>statu quo</strong>. El héroe vuelve a la normalidad, pero todo ha cambiado. Nada vuelve a ser igual después de haber vivido la aventura.</li>
+                    </ul>
+
+                    <p>Muchos libros y películas populares siguen esta fórmula muy de cerca. Veamos qué tan bien se ajusta <em>Los juegos del hambre</em> a este modelo del viaje del héroe. ¿Cuándo escucha Katniss Everdeen su llamado a la aventura? Cuando, durante la lotería, se anuncia el nombre de su hermana. ¿Quién le brinda asistencia? Haymitch. ¿Y cuál es su partida? Abandona su mundo ordinario al subir al tren rumbo a la Capital. Bien, ya captaron la idea.</p>
+                    <p>Ahora pregúntense: ¿qué tienen ustedes en común con Harry Potter, Katniss Everdeen y Frodo? La respuesta es sencilla: son seres humanos, igual que ustedes. El mito del viaje del héroe existe en todas las culturas y continúa vigente porque los seres humanos comprendemos nuestro mundo a través de historias simbólicas que reflejan nuestras propias vidas.</p>
+                    <p>Todos dejamos alguna vez nuestra zona de confort, vivimos experiencias que nos transforman, nos recuperamos de ellas y volvemos a empezar. Tal vez no maten dragones ni luchen contra Voldemort, pero sí enfrentan desafíos que pueden resultar igual de aterradores. Joseph Campbell dijo: <em>«En la cueva a la que temes entrar yace el tesoro que buscas»</em>.</p>
+                    <p>¿Cuál es esa cueva simbólica para ustedes? ¿Presentarse a las audiciones de una obra escolar? ¿Intentar entrar al equipo de béisbol? ¿Declararle su amor a alguien? Observen esta fórmula en los libros, las películas y los programas de televisión que vean. La encontrarán una y otra vez. Pero también búsquenla en sus propias vidas.</p>
+                    <p>Escuchen el llamado a la aventura. Acepten el reto. Conquisten su miedo. Reclamen el tesoro que buscan. Y, cuando terminen, vuelvan a hacerlo.</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const botonesAbrir = document.querySelectorAll('.btn-abrir-modal');
+            botonesAbrir.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.getElementById(btn.getAttribute('data-target')).classList.add('activo');
+                });
+            });
+
+            const botonesCerrar = document.querySelectorAll('.btn-cerrar-modal-accion');
+            botonesCerrar.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.modal-overlay').classList.remove('activo');
+                });
+            });
+
+            const overlays = document.querySelectorAll('.modal-overlay');
+            overlays.forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) {
+                        overlay.classList.remove('activo');
+                    }
+                });
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

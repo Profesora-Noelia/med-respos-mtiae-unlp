@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura del género narrativo: El Mito</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA (CERO SCROLL VERTICAL)
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px 45px; 
+            box-sizing: border-box;
+            height: calc(100vh - 190px); /* Ajuste exacto según grilla editorial del proyecto */
+        }
+
+        .envoltura-centrada {
+            margin: auto; 
+            width: 100%;
+            max-width: 850px;
+            position: relative;
+        }
+
+        /* ==========================================================================
+           CONTENEDOR MAESTRO DEL CARRUSEL (DISEÑO EDITORIAL)
+           ========================================================================== */
+        .contenedor-carrusel-editorial {
+            position: relative;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .trama-puntos-arte {
+            position: absolute; top: -15px; right: -15px; width: 90px; height: 90px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-coral {
+            position: absolute; top: 12px; left: 12px; width: 100%; height: 100%;
+            background-color: rgba(255, 107, 107, 0.12); border-radius: 8px; z-index: 2;
+        }
+
+        .wrapper-carrusel-maestro {
+            position: relative;
+            background-color: var(--color-blanco);
+            border-radius: 6px;
+            border: 4px solid var(--color-blanco);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            z-index: 5;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .carrusel-track-mito {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        .slide-mito {
+            min-width: 100%;
+            padding: 30px 60px 15px 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Estilos del contenido interno */
+        .slide-mito h4 {
+            font-family: var(--fuente-titulos);
+            font-size: 1.2rem;
+            color: var(--color-petroleo);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.15);
+            padding-bottom: 8px;
+        }
+
+        .slide-mito h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--color-coral);
+            stroke-width: 2;
+        }
+
+        .slide-mito p {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem;
+            line-height: 1.45;
+            color: var(--color-texto-cuerpo);
+            margin: 0 0 12px 0;
+            font-weight: 300;
+            text-align: justify;
+        }
+
+        /* Bloques de realce conceptual y ejemplos */
+        .bloque-concepto-narrativo {
+            background-color: #FDFBF7;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 4px solid var(--color-coral);
+            margin-bottom: 8px;
+        }
+
+        .bloque-concepto-narrativo.variante {
+            border-left-color: var(--color-petroleo);
+        }
+
+        .bloque-concepto-narrativo.ejemplo-anclaje {
+            border-left-color: #8B4513;
+            background-color: var(--color-hielo);
+        }
+
+        .bloque-concepto-narrativo strong {
+            font-family: var(--fuente-lectura);
+            color: var(--color-petroleo);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 1.05rem;
+        }
+
+        .bloque-concepto-narrativo p {
+            font-size: 1rem;
+            line-height: 1.35;
+            margin: 0;
+        }
+
+        /* ==========================================================================
+           CONTROLES DEL CARRUSEL
+           ========================================================================== */
+        .btn-carrusel-flecha {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-blanco);
+            border: 1px solid rgba(28, 78, 101, 0.2);
+            cursor: pointer;
+            color: var(--color-coral);
+            z-index: 10;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .btn-carrusel-flecha:hover { color: var(--color-petroleo); transform: translateY(-50%) scale(1.1); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .btn-carrusel-flecha:disabled { color: var(--color-hielo); border-color: transparent; cursor: not-allowed; transform: translateY(-50%) scale(1); box-shadow: none; }
+        .btn-prev { left: -18px; }
+        .btn-next { right: -18px; }
+        .btn-carrusel-flecha svg { width: 24px; height: 24px; fill: currentColor; }
+
+        .indicadores-carrusel-puntos {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 0 12px 0;
+        }
+
+        .punto-indicador-item {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: var(--color-hielo); transition: 0.3s ease;
+        }
+        .punto-indicador-item.activo { background-color: var(--color-petroleo); }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Estructura del género narrativo: El Mito</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <!-- Botón de Control Izquierdo -->
+                <button class="btn-carrusel-flecha btn-prev" id="btnPrevMito" disabled aria-label="Anterior">
+                    <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm32-88a8,8,0,0,1-8,8H115.31l18.35,18.34a8,8,0,0,1-11.32,11.32l-32-32a8,8,0,0,1,0-11.32l32-32a8,8,0,0,1,11.32,11.32L115.31,120H152A8,8,0,0,1,160,128Z"></path></svg>
+                </button>
+
+                <div class="contenedor-carrusel-editorial">
+                    <div class="trama-puntos-arte"></div>
+                    <div class="offset-sombra-coral"></div>
+                    
+                    <div class="wrapper-carrusel-maestro">
+                        <div class="carrusel-track-mito" id="trackMito">
+                            
+                            <!-- SLIDE 1: Características Generales -->
+                            <div class="slide-mito">
+                                <h4>
+                                    <br>
+                                </h4>
+                                <p>Para comprender los relatos de la biblioteca y poder estructurar una producción propia, identificamos las propiedades de este género discursivo:</p>
+                                
+                                <div class="bloque-concepto-narrativo">
+                                    <strong>Explicación de un origen</strong>
+                                    <p>Su función es dar sentido a la aparición de un elemento del mundo: el cosmos, los seres humanos, una ciudad o un recurso natural.</p>
+                                </div>
+                                <div class="bloque-concepto-narrativo variante">
+                                    <strong>Tiempo remoto y personajes extraordinarios</strong>
+                                    <p>Los sucesos se desarrollan en un tiempo anterior a la historia humana. Sus protagonistas son deidades, seres sobrenaturales o héroes con dones específicos.</p>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2: Estructura - Situación Inicial -->
+                            <div class="slide-mito">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    1. Situación inicial
+                                </h4>
+                                <p>Se presenta formalmente a los personajes, el escenario geográfico y el marco temporal abstracto. Describe el estado de equilibrio previo al desarrollo de la acción.</p>
+                                
+                                <div class="bloque-concepto-narrativo ejemplo-anclaje">
+                                    <strong>Ejemplo:</strong>
+                                    <p>"Hace muchísimo tiempo, cuando el mundo aún estaba formándose, el dios Viracocha, creador de todas las cosas, decidió que era momento de dar origen a un gran pueblo..."</p>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 3: Estructura - Conflicto -->
+                            <div class="slide-mito">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22 12 2"></polygon><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                                    2. Conflicto
+                                </h4>
+                                <p>Momento de quiebre donde se interrumpe la estabilidad inicial por un problema. El personaje principal debe enfrentar a una bestia, cumplir una orden divina o iniciar una travesía riesgosa.</p>
+                                
+                                <div class="bloque-concepto-narrativo ejemplo-anclaje">
+                                    <strong>Ejemplo:</strong>
+                                    <p>"Atenas padecía por entonces una gran penuria... Cada año, los atenienses debían enviar a siete jóvenes y siete doncellas para que fueran devorados en Creta por el Minotauro."</p>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 4: Estructura - Desenlace -->
+                            <div class="slide-mito">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 11"></polyline></svg>
+                                    3. Desenlace
+                                </h4>
+                                <p>Resolución definitiva de las acciones. En el mito, el final se caracteriza por una transformación permanente que da origen a la realidad actual que conocemos.</p>
+                                
+                                <div class="bloque-concepto-narrativo ejemplo-anclaje">
+                                    <strong>Ejemplo:</strong>
+                                    <p>"Al llegar a la orilla, frente a Pachacámac, se arrojó y quedaron convertidos, ella y su hijo, en dos islotes... Y es por esto que el mar se encuentra poblado de peces."</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Indicadores de posición inferiores -->
+                        <div class="indicators-container">
+                            <div class="indicadores-carrusel-puntos" id="indicadoresMito">
+                                <div class="punto-indicador-item activo"></div>
+                                <div class="punto-indicador-item"></div>
+                                <div class="punto-indicador-item"></div>
+                                <div class="punto-indicador-item"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Botón de Control Derecho -->
+                <button class="btn-carrusel-flecha btn-next" id="btnNextMito" aria-label="Siguiente">
+                    <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-93.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32-11.32L140.69,136H104a8,8,0,0,1,0-16h36.69l-10.35-10.34a8,8,0,0,1,11.32-11.32Z"></path></svg>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL EXCLUSIVA (VOLVER A LAS AYUDAS) -->
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla8.html" class="btn-retroceso-sutil">← Volver al Menú de Ayudas</a>
+        </nav>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('trackMito');
+            const btnPrev = document.getElementById('btnPrevMito');
+            const btnNext = document.getElementById('btnNextMito');
+            const puntos = document.querySelectorAll('.punto-indicador-item');
+            const slides = document.querySelectorAll('.slide-mito');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            const actualizarCarrusel = () => {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                btnPrev.disabled = currentIndex === 0;
+                btnNext.disabled = currentIndex === totalSlides - 1;
+
+                puntos.forEach((punto, index) => {
+                    if(index === currentIndex) {
+                        punto.classList.add('activo');
+                    } else {
+                        punto.classList.remove('activo');
+                    }
+                });
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    actualizarCarrusel();
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    actualizarCarrusel();
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Perspectiva Temporal</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ESTILOS ESPECÍFICOS DE PANTALLA 3 (DISEÑO EDITORIAL / REVISTA)
+           ========================================================================== */
+        
+        /* Ajuste local para centrar verticalmente y aprovechar el ancho al máximo */
+        .zona-contenido-fija { 
+            display: flex; 
+            align-items: center; 
+            padding: 5px 30px 5px 30px; 
+        }
+
+        .layout-revista {
+            display: grid;
+            grid-template-columns: 1.5fr 0.7fr; /* 65% Texto / 35% Imagen */
+            gap: 25px; 
+            width: 100%;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ==========================================================================
+           COLUMNA IZQUIERDA: EL TEXTO ORIGINAL
+           ========================================================================== */
+        .bloque-texto-original {
+            display: flex;
+            flex-direction: column;
+            gap: 6px; 
+            position: relative;
+            padding-left: 18px;
+        }
+
+       
+
+        .parrafo-lead {
+            font-family: var(--fuente-lectura);
+            font-size: 1.15rem; 
+            line-height: 1.35; 
+            color: var(--color-petroleo);
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .parrafo-normal {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            line-height: 1.35; 
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+        }
+
+        /* ==========================================================================
+           COLUMNA DERECHA: IMAGEN CON EFECTOS GRÁFICOS
+           ========================================================================== */
+        .columna-arte {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .contenedor-imagen-dinamica {
+            position: relative;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 100%;
+        }
+
+        .trama-puntos-arte {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 100px;
+            height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px;
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .offset-sombra-coral {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 107, 107, 0.15); 
+            border-radius: 6px;
+            z-index: 2;
+        }
+
+        .imagen-lateral {
+            position: relative;
+            width: 100%;
+            max-height: 280px; 
+            object-fit: contain; 
+            border-radius: 4px;
+            border: 5px solid var(--color-blanco);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+            transform: rotate(-1deg);
+            background-color: #E0EAEF; 
+        }
+
+        .sello-grafico-foto {
+            position: absolute;
+            bottom: -8px;
+            left: -8px;
+            background-color: var(--color-blanco);
+            padding: 6px 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            z-index: 10;
+            font-family: var(--fuente-lectura);
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--color-petroleo);
+            transform: rotate(-3deg);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Créditos de la imagen (IA y Autor) */
+        .creditos-imagen {
+            font-family: var(--fuente-lectura);
+            font-size: 0.7rem; 
+            color: #777777;
+            text-align: center;
+            margin-top: 18px; 
+            line-height: 1.3;
+            max-width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>El héroe visto desde una perspectiva temporal</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            
+            <div class="layout-revista">
+                
+                <div class="bloque-texto-original">
+                    <p class="parrafo-lead">
+                        El héroe, según Joseph Campbell, conocido escritor de mitología, ha sufrido transformaciones a lo largo del tiempo y de la historia por diferentes cuestiones culturales, religiosas y sociales.
+                    </p>
+                    <p class="parrafo-normal">
+                        En las épocas de la mitología, el héroe era consagrado como un ser divino con determinadas cualidades y dones, incrustados en mitos y leyendas en la literatura.
+                    </p>
+                    <p class="parrafo-normal">
+                        Muchos de estos eran seres sobrenaturales, Dioses o semidioses con características humanas.
+                    </p>
+                    <p class="parrafo-normal">
+                        Había una tendencia de dotar al héroe de fuerzas extraordinarias, se muestra siempre como un ser con un conjunto de maravillas con grandes aventuras como gran culminación; Ulises, Aquiles y Eneas fueron grandes héroes para la mitología griega.
+                    </p>
+                    <p class="parrafo-normal">
+                        Por otra parte, el héroe pasó a ser también un guerrero, tomamos como ejemplo historias de Esparta donde los niños eran educados para la guerra.
+                    </p>
+                </div>
+
+                <aside class="columna-arte">
+                    
+                    <div class="contenedor-imagen-dinamica">
+                        <div class="trama-puntos-arte"></div>
+                        <div class="offset-sombra-coral"></div>
+                        
+                        <img src="assets/aquiles.png" alt="Aquiles sacrificando su cabello por Patroclo" class="imagen-lateral" onerror="this.src='aquiles.png'">
+                        
+                        <div class="sello-grafico-foto">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--color-coral)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            Aquiles clásico
+                        </div>
+                    </div>
+
+                    <div class="creditos-imagen">
+                        Ilustración generada con IA (Google Gemini). Inspirada en la obra <em>Aquiles sacrificando su cabello por Patroclo</em> (1800-1805) de Johann Heinrich Füssli.
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla2.html" class="btn-retroceso-sutil">← Volver</a>
+            <a href="pantalla4.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+
+    </main>
+
+    <script src="js/global.js"></script>
+</body>
+</html>

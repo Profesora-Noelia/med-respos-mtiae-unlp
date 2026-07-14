@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 1 - Reconociendo el heroísmo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT Y CONTENEDOR PRINCIPAL
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 10px 45px; box-sizing: border-box; height: calc(100vh - 190px); position: relative;
+        }
+
+        .envoltura-centrada {
+            margin: auto; width: 100%; max-width: 950px; height: 100%; 
+            display: flex; align-items: center; position: relative; z-index: 10;
+        }
+
+        .contenedor-editorial-actividad { position: relative; width: 100%; height: 96%; }
+
+        .trama-puntos-esquina {
+            position: absolute; top: -15px; left: -15px; width: 100px; height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-editorial {
+            position: absolute; top: 12px; left: 12px; width: 100%; height: 100%;
+            background-color: rgba(28, 78, 101, 0.1); border-radius: 0; z-index: 2;
+        }
+
+        .wrapper-actividad {
+            position: relative; background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo); border-top: 6px solid var(--color-petroleo); 
+            padding: 30px 40px; box-sizing: border-box; z-index: 5;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.05);
+            display: flex; flex-direction: column; justify-content: center; gap: 25px; height: 100%;
+        }
+
+        /* ==========================================================================
+           CABECERA 
+           ========================================================================== */
+        .header-actividad {
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.2);
+            padding-bottom: 15px; flex-shrink: 0; 
+        }
+
+        .instruccion-principal {
+            font-family: var(--fuente-lectura); 
+            font-size: 1.05rem; 
+            color: var(--color-texto-cuerpo); 
+            margin: 0; 
+            line-height: 1.5;
+            text-align: justify; 
+        }
+
+        /* ==========================================================================
+           GRILLA Y TARJETAS GIRATORIAS
+           ========================================================================== */
+        .grilla-casos {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            perspective: 1200px; flex-shrink: 0;
+        }
+
+        .tarjeta-flip {
+            background-color: transparent; width: 100%; height: 225px; 
+            cursor: pointer; position: relative;
+        }
+
+        .tarjeta-inner {
+            position: relative; width: 100%; height: 100%; text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        .tarjeta-flip.rotada .tarjeta-inner { transform: rotateY(180deg); }
+
+        .tarjeta-frente, .tarjeta-dorso {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden; 
+            transform: translateZ(1px); 
+            border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            box-sizing: border-box; border: 2px solid rgba(28, 78, 101, 0.15); background-color: #FDFBF7;
+        }
+
+        .tarjeta-frente { z-index: 2; transition: border-color 0.3s; padding: 15px; transform: rotateY(0deg) translateZ(1px); }
+        .tarjeta-flip:hover .tarjeta-frente { border-color: rgba(28, 78, 101, 0.4); }
+        .tarjeta-frente h4 { font-family: var(--fuente-titulos); font-size: 1.1rem; color: var(--color-petroleo); margin: 12px 0 5px 0; }
+        .tarjeta-frente p { font-family: var(--fuente-lectura); font-size: 0.8rem; color: var(--color-coral); margin: 0; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .svg-ilustracion { width: 70px; height: 70px; margin-bottom: 5px; }
+
+        .tarjeta-dorso {
+            transform: rotateY(180deg) translateZ(1px); background-color: var(--color-blanco);
+            justify-content: space-between; text-align: left; padding: 15px 18px; 
+        }
+        .tarjeta-dorso p { font-family: var(--fuente-lectura); font-size: 1.02rem; color: var(--color-texto-cuerpo); margin: 0; line-height: 1.35; font-weight: 300; text-align: justify; }
+
+        .tarjeta-flip.seleccionada .tarjeta-frente,
+        .tarjeta-flip.seleccionada .tarjeta-dorso { border-color: var(--color-coral); box-shadow: 0 0 0 2px var(--color-coral), 0 8px 20px rgba(255, 107, 107, 0.15); }
+
+        .btn-marcar {
+            background-color: var(--color-hielo); color: var(--color-petroleo);
+            border: 1px solid var(--color-petroleo); padding: 8px; border-radius: 4px;
+            font-family: var(--fuente-lectura); font-size: 0.9rem; font-weight: 600;
+            width: 100%; cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
+        }
+        .tarjeta-flip.seleccionada .btn-marcar { background-color: var(--color-coral); border-color: var(--color-coral); color: var(--color-blanco); }
+
+        /* ==========================================================================
+           BOTÓN COMPROBAR EN BARRA DE NAVEGACIÓN
+           ========================================================================== */
+        .btn-comprobar-nav {
+            background-color: var(--color-petroleo); color: var(--color-blanco);
+            font-family: var(--fuente-lectura); font-weight: 600; font-size: 1.05rem;
+            border: none; padding: 12px 35px; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(28, 78, 101, 0.2);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-comprobar-nav:hover:not(:disabled) { background-color: #123648; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(28, 78, 101, 0.3); }
+        .btn-comprobar-nav:disabled { background-color: #A0B2BC; cursor: not-allowed; color: #E0EAEF; box-shadow: none; transform: none;}
+
+        /* Estado "Completado" del botón */
+        .btn-comprobar-nav.completado {
+            background-color: #4CAF50 !important; color: white !important;
+            box-shadow: none !important; cursor: default !important; transform: none !important;
+        }
+
+        /* ==========================================================================
+           MODAL DE FEEDBACK (DISEÑO EDITORIAL)
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(28, 78, 101, 0.7); backdrop-filter: blur(4px);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.activo { opacity: 1; visibility: visible; }
+
+        .modal-caja {
+            background-color: var(--color-blanco); width: 100%; max-width: 500px; padding: 40px;
+            position: relative; transform: translateY(30px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--color-petroleo);
+            box-shadow: 12px 12px 0 rgba(28, 78, 101, 0.15); display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .modal-overlay.activo .modal-caja { transform: translateY(0); }
+
+        .modal-caja.exito { border-top: 8px solid #4CAF50; }
+        .modal-caja.alerta { border-top: 8px solid #FF9800; }
+
+        /* Botón Cruz para cerrar el Modal */
+        .btn-cerrar-cruz {
+            position: absolute; top: 15px; right: 15px; background: transparent; border: none;
+            cursor: pointer; color: var(--color-petroleo); transition: color 0.2s ease;
+            padding: 5px; display: flex; justify-content: center; align-items: center;
+        }
+        .btn-cerrar-cruz:hover { color: var(--color-coral); }
+        .btn-cerrar-cruz svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+
+        .icono-modal { width: 48px; height: 48px; margin-bottom: 15px; }
+        .modal-caja.exito .icono-modal { fill: none; stroke: #4CAF50; stroke-width: 2; }
+        .modal-caja.alerta .icono-modal { fill: none; stroke: #FF9800; stroke-width: 2; }
+
+        .titulo-modal { font-family: var(--fuente-titulos); font-size: 1.5rem; color: var(--color-petroleo); margin: 0 0 10px 0; }
+        .texto-modal { font-family: var(--fuente-lectura); font-size: 1.05rem; line-height: 1.5; color: var(--color-texto-cuerpo); margin: 0 0 25px 0; font-weight: 300; }
+        .texto-modal em { font-weight: 600; color: var(--color-petroleo); font-style: normal; background-color: var(--color-hielo); padding: 0 4px; border-radius: 3px;}
+
+        .btn-accion-modal {
+            background-color: var(--color-petroleo); color: var(--color-blanco); font-family: var(--fuente-lectura);
+            font-weight: 600; font-size: 1rem; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; transition: background 0.2s ease;
+        }
+        .btn-accion-modal:hover { background-color: #123648; }
+
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Actividad 1: Reconociendo el heroísmo</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <div class="contenedor-editorial-actividad">
+                    <div class="trama-puntos-esquina"></div>
+                    <div class="offset-sombra-editorial"></div>
+                    
+                    <div class="wrapper-actividad">
+                        
+                        <div class="header-actividad">
+                            <p class="instruccion-principal">
+                                Recuperando la definición de la RAE y la diferencia entre héroes de ficción y cotidianos, analizá los siguientes casos. Haz clic en las tarjetas para girarlas y <strong>seleccioná todas las situaciones que representen verdaderas acciones heroicas.</strong>
+                            </p>
+                        </div>
+
+                        <div class="grilla-casos">
+                            <!-- Tarjeta 1 -->
+                            <div class="tarjeta-flip" data-id="1">
+                                <div class="tarjeta-inner">
+                                    <div class="tarjeta-frente">
+                                        <svg class="svg-ilustracion" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#EAE5D9"/><path d="M45,20 L55,20 L50,10 Z M45,20 L55,20 L55,75 L50,90 L45,75 Z" fill="var(--color-petroleo)"/><rect x="35" y="70" width="30" height="6" fill="var(--color-coral)"/><path d="M70,30 L75,35 L85,25 Z M20,60 L25,65 L15,70 Z" fill="var(--color-coral)"/></svg>
+                                        <h4>Guerrero de Leyenda</h4>
+                                        <p>Girar para leer</p>
+                                    </div>
+                                    <div class="tarjeta-dorso">
+                                        <p>Aria, una guerrera con fuerza mágica, se enfrenta sola a un dragón de fuego asumiendo un riesgo mortal para evitar que destruya su aldea.</p>
+                                        <button class="btn-marcar">Seleccionar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta 2 -->
+                            <div class="tarjeta-flip" data-id="2">
+                                <div class="tarjeta-inner">
+                                    <div class="tarjeta-frente">
+                                        <svg class="svg-ilustracion" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#EAE5D9"/><path d="M50,15 C30,45 20,60 30,80 C40,95 60,95 70,80 C80,60 70,45 50,15 Z" fill="var(--color-coral)"/><path d="M50,45 C40,60 35,70 40,80 C45,85 55,85 60,80 C65,70 60,60 50,45 Z" fill="#FDFBF7"/><rect x="42" y="55" width="16" height="4" fill="var(--color-petroleo)" transform="rotate(45 50 57)"/><rect x="42" y="55" width="16" height="4" fill="var(--color-petroleo)" transform="rotate(-45 50 57)"/></svg>
+                                        <h4>Profesional de Riesgo</h4>
+                                        <p>Girar para leer</p>
+                                    </div>
+                                    <div class="tarjeta-dorso">
+                                        <p>Martín, un bombero voluntario sin poderes mágicos, entra a un edificio a punto de colapsar para rescatar a una familia que quedó atrapada.</p>
+                                        <button class="btn-marcar">Seleccionar</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tarjeta 3 -->
+                            <div class="tarjeta-flip" data-id="3">
+                                <div class="tarjeta-inner">
+                                    <div class="tarjeta-frente">
+                                        <svg class="svg-ilustracion" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="#EAE5D9"/><path d="M50,15 L80,25 L80,50 C80,75 50,90 50,90 C50,90 20,75 20,50 L20,25 Z" fill="var(--color-petroleo)"/><circle cx="50" cy="45" r="12" fill="var(--color-coral)"/><path d="M30,75 C30,60 70,60 70,75" fill="none" stroke="var(--color-coral)" stroke-width="8" stroke-linecap="round"/></svg>
+                                        <h4>La vida escolar</h4>
+                                        <p>Girar para leer</p>
+                                    </div>
+                                    <div class="tarjeta-dorso">
+                                        <p>Lucía ve que un grupo de chicos mayores molesta a un compañero nuevo. Venciendo su miedo, interviene para frenarlos y busca a un profesor.</p>
+                                        <button class="btn-marcar">Seleccionar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija" style="justify-content: space-between;">
+            <a href="pantalla4.html" class="btn-retroceso-sutil">← Volver</a>
+            
+            <button id="btnComprobar" class="btn-comprobar-nav" disabled>
+                Comprobar respuestas
+            </button>
+        </nav>
+
+        <!-- MODAL DE FEEDBACK -->
+        <div class="modal-overlay" id="modalFeedback">
+            <div class="modal-caja" id="cajaFeedbackInterna">
+                <button class="btn-cerrar-cruz" id="btnCerrarCruz" aria-label="Cerrar ventana">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+
+                <svg class="icono-modal" id="iconoFeedback" viewBox="0 0 24 24"></svg>
+                <h3 class="titulo-modal" id="tituloFeedback"></h3>
+                <p class="texto-modal" id="textoFeedback"></p>
+                
+                <button class="btn-accion-modal" id="btnAccionModal"></button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tarjetas = document.querySelectorAll('.tarjeta-flip');
+            const btnComprobar = document.getElementById('btnComprobar');
+            
+            const modal = document.getElementById('modalFeedback');
+            const cajaInterna = document.getElementById('cajaFeedbackInterna');
+            const btnCerrarCruz = document.getElementById('btnCerrarCruz');
+            const iconoFeedback = document.getElementById('iconoFeedback');
+            const tituloFeedback = document.getElementById('tituloFeedback');
+            const textoFeedback = document.getElementById('textoFeedback');
+            const btnAccionModal = document.getElementById('btnAccionModal');
+
+            const svgExito = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>';
+            const svgAlerta = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+
+            let esCorrecto = false;
+
+            tarjetas.forEach(tarjeta => {
+                tarjeta.addEventListener('click', function() {
+                    // No girar si ya está respondido correctamente
+                    if(!btnComprobar.classList.contains('completado')) {
+                        this.classList.toggle('rotada');
+                    }
+                });
+
+                const btnMarcar = tarjeta.querySelector('.btn-marcar');
+                btnMarcar.addEventListener('click', function(e) {
+                    e.stopPropagation(); 
+                    if(btnComprobar.classList.contains('completado')) return;
+
+                    tarjeta.classList.toggle('seleccionada');
+                    
+                    if(tarjeta.classList.contains('seleccionada')) {
+                        this.innerHTML = 'Seleccionado';
+                    } else {
+                        this.innerHTML = 'Seleccionar';
+                    }
+
+                    const haySeleccionadas = document.querySelectorAll('.tarjeta-flip.seleccionada').length > 0;
+                    btnComprobar.disabled = !haySeleccionadas;
+                });
+            });
+
+            btnComprobar.addEventListener('click', () => {
+                // Si ya está completado, no hace nada
+                if(btnComprobar.classList.contains('completado')) return;
+
+                const seleccionadas = Array.from(document.querySelectorAll('.tarjeta-flip.seleccionada')).map(t => t.getAttribute('data-id'));
+                cajaInterna.classList.remove('exito', 'alerta');
+
+                if (seleccionadas.length === 3) {
+                    esCorrecto = true;
+                    cajaInterna.classList.add('exito');
+                    iconoFeedback.innerHTML = svgExito;
+                    tituloFeedback.innerText = '¡Excelente razonamiento!';
+                    textoFeedback.innerHTML = `Has comprendido que en la ficción (la guerrera), en profesiones extremas (el bombero) o en tu escuela, el heroísmo es accionar con <em>abnegación por una causa noble</em>.`;
+                    
+                    // Ocultar botón reintentar en éxito
+                    btnAccionModal.style.display = 'none';
+                    
+                    // Cambiar estado visual del botón de navegación a "Completado"
+                    btnComprobar.innerHTML = 'Actividad Completada';
+                    btnComprobar.classList.add('completado');
+                    btnComprobar.disabled = true;
+                    
+                    // Bloquear interacción con las tarjetas
+                    tarjetas.forEach(t => t.style.cursor = 'default');
+                } 
+                else {
+                    esCorrecto = false;
+                    btnAccionModal.style.display = 'block';
+                    btnAccionModal.innerText = 'Reintentar actividad';
+                    cajaInterna.classList.add('alerta');
+                    iconoFeedback.innerHTML = svgAlerta;
+
+                    if (seleccionadas.includes('1') && seleccionadas.includes('2') && !seleccionadas.includes('3')) {
+                        tituloFeedback.innerText = 'Casi lo lográs...';
+                        textoFeedback.innerHTML = `Reconociste a los héroes de la ficción y profesionales. Pero ¡ojo! Proteger a un compañero de clase también es asumir un riesgo por una <em>causa noble</em>. ¡El heroísmo está en la vida cotidiana!`;
+                    }
+                    else if (seleccionadas.includes('3') && !seleccionadas.includes('1')) {
+                        tituloFeedback.innerText = 'Buena observación, pero...';
+                        textoFeedback.innerHTML = `Es excelente que notes el heroísmo escolar. Sin embargo, no olvides la ficción: aunque la guerrera tenga magia, su motivación (salvar su aldea) sigue siendo una <em>causa noble y abnegada</em>.`;
+                    }
+                    else {
+                        tituloFeedback.innerText = 'Recordemos la definición...';
+                        textoFeedback.innerHTML = `Según la RAE, un héroe realiza acciones abnegadas por una <em>causa noble</em>. ¿Acaso proteger a otros (ante un dragón, el fuego o un grupo de acosadores) no es siempre una causa noble?`;
+                    }
+                }
+
+                modal.classList.add('activo');
+            });
+
+            // Función para limpiar la mesa
+            const resetearMesa = () => {
+                tarjetas.forEach(tarjeta => {
+                    tarjeta.classList.remove('seleccionada', 'rotada');
+                    const btnMarcar = tarjeta.querySelector('.btn-marcar');
+                    btnMarcar.innerHTML = 'Seleccionar';
+                });
+                btnComprobar.disabled = true;
+            };
+
+            // Cerrar desde la crucecita (Si es correcto, solo cierra el modal. Si es error, no resetea la mesa para dejar ver el error)
+            btnCerrarCruz.addEventListener('click', () => {
+                modal.classList.remove('activo');
+            });
+
+            // Botón de Reintentar (solo visible en errores) limpia la mesa
+            btnAccionModal.addEventListener('click', () => {
+                modal.classList.remove('activo');
+                resetearMesa();
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,266 @@
+/* ==========================================================================
+   ESTE SIRVE PARA: Estructurar la diapositiva rígida 16:9, botones, modales 
+   y contenedores base para todas las pantallas del recurso.
+   ========================================================================== */
+
+/* ** este sirve para: moldear el marco contenedor de las pantallas asegurando la proporción 16:9 ** */
+.diapositiva-marco {
+    width: 90vw;
+    max-width: 1024px;
+    aspect-ratio: 16 / 9;
+    background-color: var(--color-blanco);
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(28, 78, 101, 0.06);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1px solid rgba(28, 78, 101, 0.08);
+}
+
+/* ** este sirve para: materializar la miscelánea gráfica del borde superior ** */
+.miscelanea-borde-superior {
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(to right, var(--color-petroleo) 65%, var(--color-coral) 65%, var(--color-coral) 70%, var(--color-hielo) 70%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
+/* ** este sirve para: fijar la altura del encabezado principal de cada pantalla ** */
+.encabezado-fijo {
+    padding: 35px 45px 15px 45px;
+    margin-top: 8px;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.encabezado-fijo h2 {
+    font-family: var(--fuente-titulos);
+    color: var(--color-petroleo);
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   SISTEMAS DE CONTENEDORES DE CONTENIDO
+   ========================================================================== */
+
+/* ** este sirve para: pantallas con mucho texto que sí o sí requieren scroll interno ** */
+.zona-contenido-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 45px 20px 45px;
+    box-sizing: border-box;
+    z-index: 2;
+}
+
+/* ** este sirve para: las pantallas modernas panorámicas (cero scroll garantizado) ** */
+.zona-contenido-fija {
+    flex: 1;
+    box-sizing: border-box;
+    overflow-y: auto; /* Solo actúa en caso de emergencia en pantallas muy chicas */
+    scrollbar-width: none; /* Firefox */
+    position: relative;
+}
+.zona-contenido-fija::-webkit-scrollbar { 
+    display: none; /* Chrome/Safari */
+}
+
+/* ==========================================================================
+   NAVEGACIÓN Y BOTONES
+   ========================================================================== */
+
+.barra-navegacion-fija {
+    padding: 15px 45px 30px 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-blanco);
+    border-top: 1px solid rgba(28, 78, 101, 0.04);
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.btn-accion-coral {
+    background-color: var(--color-coral);
+    color: var(--color-blanco);
+    font-family: var(--fuente-lectura);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(255, 107, 107, 0.25);
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.2s ease;
+}
+.btn-accion-coral:hover { transform: translateY(-2px); filter: brightness(1.03); }
+
+.btn-navegacion-petroleo {
+    background-color: var(--color-petroleo);
+    color: var(--color-blanco);
+    font-family: var(--fuente-lectura);
+    font-weight: 400;
+    font-size: 0.95rem;
+    padding: 12px 26px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.btn-navegacion-petroleo:hover { background-color: #123544; transform: translateY(-1px); }
+
+.btn-retroceso-sutil {
+    background-color: transparent;
+    color: var(--color-petroleo);
+    font-family: var(--fuente-lectura);
+    font-size: 0.95rem;
+    padding: 12px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid var(--color-hielo);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-retroceso-sutil:hover { background-color: var(--color-hielo); }
+
+/* ==========================================================================
+   SISTEMA DE MODALES Y VENTANAS EMERGENTES (GLOBAL)
+   ========================================================================== */
+
+/* ** este sirve para: crear la capa oscura transparente de fondo cuando se abre un modal ** */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(28, 78, 101, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.activo {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ** este sirve para: diseñar la tarjeta blanca que contiene la información del modal ** */
+.modal-tarjeta {
+    background-color: var(--color-blanco);
+    width: 85%;
+    max-width: 480px;
+    padding: 35px 30px;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+    border-top: 6px solid var(--color-coral);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    text-align: center;
+}
+.modal-overlay.activo .modal-tarjeta {
+    transform: scale(1);
+}
+
+/* ** este sirve para: el botón X para cerrar modales ** */
+.btn-cerrar-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--color-petroleo);
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+.btn-cerrar-modal:hover { transform: scale(1.15); }
+
+/* ** este sirve para: las cajas de info internas estilo encuadre ** */
+.info-badge-modal {
+    background-color: var(--color-hielo);
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: var(--color-petroleo);
+    text-align: left;
+}
+
+/* ==========================================================================
+   ANIMACIÓN CINEMÁTICA DE ENTRADA
+   ========================================================================== */
+.transicion-diapositiva {
+    animation: slideInSmooth 0.55s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+@keyframes slideInSmooth {
+    from { opacity: 0; transform: scale(0.98) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+/* ==========================================================================
+   TARJETAS PREMIUM Y LISTAS DESTACADAS (GLOBALES)
+   ========================================================================== */
+.contenedor-bloque-dinamico {
+    position: relative;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.trama-puntos {
+    position: absolute; top: -12px; right: -12px;
+    width: 80px; height: 80px;
+    background-image: radial-gradient(var(--dot-color, var(--color-petroleo)) 1.5px, transparent 1.5px);
+    background-size: 12px 12px; opacity: 0.18; z-index: 1;
+}
+
+.offset-sombra {
+    position: absolute; top: 10px; left: 10px; width: 100%; height: 100%;
+    background-color: var(--bg-offset, rgba(28, 78, 101, 0.1));
+    border-radius: 4px; z-index: 2;
+}
+
+.tarjeta-premium {
+    position: relative; background-color: var(--color-blanco);
+    border: 1px solid rgba(0,0,0,0.04); padding: 35px 25px 22px 25px;
+    z-index: 5; box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+    transform: rotate(var(--rotation, -0.5deg)); 
+}
+
+.sello-titulo {
+    position: absolute; top: -15px; left: 20px;
+    background-color: var(--color-blanco); padding: 7px 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); z-index: 10;
+    font-family: var(--fuente-titulos); font-size: 0.95rem; font-weight: 700;
+    color: var(--text-color); transform: rotate(var(--label-rotation, -1.5deg));
+    display: flex; align-items: center; gap: 8px;
+    border-left: 4px solid var(--text-color);
+}
+
+.sello-titulo svg { width: 16px; height: 16px; fill: var(--text-color); }
+
+.lista-destacada { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.lista-destacada li { font-family: var(--fuente-lectura); font-size: 0.95rem; line-height: 1.45; color: var(--color-texto-cuerpo); display: flex; align-items: flex-start; gap: 10px; }
+.bullet-svg { width: 16px; height: 16px; fill: var(--text-color); flex-shrink: 0; margin-top: 2px; }
+
+/* Variaciones de color para inyectar mediante clases */
+.bloque-petroleo { --text-color: var(--color-petroleo); --bg-offset: rgba(28, 78, 101, 0.14); --rotation: -0.3deg; --label-rotation: -1deg; }
+.bloque-coral { --text-color: var(--color-coral); --bg-offset: rgba(255, 107, 107, 0.11); --dot-color: var(--color-coral); --rotation: 0.3deg; --label-rotation: 1deg; }

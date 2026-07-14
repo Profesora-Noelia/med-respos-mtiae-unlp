@@ -1,0 +1,49 @@
+/* ==========================================================================
+   ESTE SIRVE PARA: Definir la paleta de colores corporativa y tipografías 
+   completamente sans-serif (sin serifas) para asegurar máxima accesibilidad.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap');
+
+:root {
+    /* ** este sirve para: definir el azul petróleo insignia para títulos de alta jerarquía ** */
+    --color-petroleo: #1C4E65;
+
+    /* ** este sirve para: definir el azul hielo suave para tramas decorativas y fondos de cajas ** */
+    --color-hielo: #E0EAEF;
+
+    /* ** este sirve para: definir el blanco puro del fondo de las diapositivas de aprendizaje ** */
+    --color-blanco: #FFFFFF;
+
+    /* ** este sirve para: definir el color gris azulado pastel de fondo del navegador ** */
+    --color-gris-fondo: #F0F4F7;
+
+    /* ** este sirve para: definir el coral vibrante usado de manera estratégica en los botones de acción ** */
+    --color-coral: #FF6B6B;
+
+    /* ** este sirve para: definir el tono gris oscuro para textos generales, ideal para evitar fatiga visual ** */
+    --color-texto-cuerpo: #333333;
+
+    /* ** este sirve para: inyectar la tipografía Comfortaa (sans-serif redondeada) exclusivamente para títulos ** */
+    --fuente-titulos: 'Comfortaa', sans-serif;
+
+    /* ** este sirve para: inyectar la tipografía Lexend (sans-serif accesible) para textos, listas y botones ** */
+    --fuente-lectura: 'Lexend', sans-serif;
+}
+
+/* ** este sirve para: normalizar el lienzo del navegador e incorporar la trama de puntos decorativa de fondo ** */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-gris-fondo);
+    /* ** este sirve para: crear una trama minimalista de puntos de diseño (dot matrix) de fondo usando CSS puro ** */
+    background-image: radial-gradient(var(--color-hielo) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    font-family: var(--fuente-lectura);
+    color: var(--color-texto-cuerpo);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}

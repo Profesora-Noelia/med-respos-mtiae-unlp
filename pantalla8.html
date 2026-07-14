@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Nivel 3: Crear</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px 45px; 
+            box-sizing: border-box;
+            height: calc(100vh - 190px); 
+        }
+
+        .envoltura-centrada {
+            margin: auto; 
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .layout-dos-columnas {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr; 
+            gap: 45px;
+            align-items: center; 
+            position: relative;
+        }
+
+        /* ==========================================================================
+           COLUMNA IZQUIERDA: DISEÑO EDITORIAL
+           ========================================================================== */
+        .contenedor-editorial-izq {
+            position: relative;
+            width: 100%;
+            z-index: 5;
+        }
+
+        .trama-puntos-esquina {
+            position: absolute; top: -15px; left: -15px; width: 90px; height: 90px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-editorial {
+            position: absolute; 
+            top: 12px; 
+            left: 12px; 
+            width: 100%; 
+            height: 100%; /* Corregido: vuelve a 100% para copiar el tamaño de la caja */
+            background-color: rgba(255, 107, 107, 0.15); 
+            border-radius: 0; 
+            z-index: 2;
+        }
+
+        .bloque-texto-editorial {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; 
+            position: relative;
+            z-index: 5;
+            background-color: var(--color-blanco);
+            padding: 22px 30px; /* Levemente reducido para asegurar cero scroll */
+            border: 1px solid var(--color-petroleo);
+            border-top: 6px solid var(--color-petroleo); 
+            border-radius: 0; 
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.05);
+            box-sizing: border-box;
+        }
+
+        .parrafo-destacado {
+            font-family: var(--fuente-lectura);
+            font-size: 1.1rem; 
+            line-height: 1.4; 
+            color: var(--color-petroleo);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .parrafo-normal {
+            font-family: var(--fuente-lectura);
+            font-size: 1rem; 
+            line-height: 1.4; 
+            color: var(--color-texto-cuerpo);
+            margin: 0;
+            font-weight: 300;
+        }
+
+        .lista-sintesis {
+            margin: 0;
+            padding-left: 20px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: var(--color-texto-cuerpo);
+            font-weight: 300;
+        }
+
+        .lista-sintesis li {
+            margin-bottom: 6px;
+        }
+
+        /* ==========================================================================
+           COLUMNA DERECHA: BOTONES DE AYUDA Y CONTEXTO
+           ========================================================================== */
+        .contenedor-botones-ayuda {
+            display: flex;
+            flex-direction: column;
+            gap: 12px; /* Reducido levemente para mayor compacidad */
+            position: relative;
+            z-index: 5;
+        }
+
+        .instruccion-lateral {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--color-hielo);
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.9rem;
+            color: var(--color-petroleo);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .instruccion-lateral svg {
+            flex-shrink: 0;
+        }
+
+        .btn-ayuda-compacto {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo);
+            padding: 14px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--color-petroleo);
+            font-weight: 600;
+            font-family: var(--fuente-lectura);
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            text-align: left;
+            box-shadow: 4px 4px 0 var(--color-coral);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-ayuda-compacto:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 7px 7px 0 var(--color-coral);
+            background-color: #FDFBF7;
+        }
+
+        .btn-ayuda-compacto svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Nivel 3: ¡Tu turno de Crear!</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <div class="layout-dos-columnas">
+                    
+                    <!-- COLUMNA IZQUIERDA: SÍNTESIS Y MISIÓN (DISEÑO EDITORIAL) -->
+                    <div class="contenedor-editorial-izq">
+                        <div class="trama-puntos-esquina"></div>
+                        <div class="offset-sombra-editorial"></div>
+                        
+                        <div class="bloque-texto-editorial">
+                            <p class="parrafo-destacado">
+                                ¡Felicitaciones! Has superado con éxito la investigación y lectura.
+                            </p>
+                            
+                            <p class="parrafo-normal">A lo largo del recorrido hemos descubierto:</p>
+                            
+                            <ul class="lista-sintesis">
+                                <li>Que un héroe no necesita poderes mágicos, sino valentía y un propósito noble.</li>
+                                <li>Relatos antiguos que explican el origen del mundo y de las culturas.</li>
+                                <li>Que casi todas estas aventuras esconden la receta del <strong>"Viaje del Héroe"</strong>.</li>
+                            </ul>
+
+                            <p class="parrafo-destacado" style="margin-top: 5px; color: var(--color-coral);">
+                                ¿Cuál es tu misión ahora?
+                            </p>
+                            <!-- Párrafo restaurado y corregido con sus clases CSS correctas -->
+                            <p class="parrafo-normal">
+                                <strong>¡Llegó el momento de convertirte en escritor o escritora!</strong> En este nivel final te invitamos a inventar tu propio personaje y escribir un relato sobre su gran aventura.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- COLUMNA DERECHA: BOTONES DE AYUDA -->
+                    <aside class="contenedor-botones-ayuda">
+                        
+                        <div class="instruccion-lateral">
+                            <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor"><path d="M237.66,122.34l-80-80A8,8,0,0,0,144,48V88H32a8,8,0,0,0-8,8v64a8,8,0,0,0,8,8H144v40a8,8,0,0,0,13.66,5.66l80-80A8,8,0,0,0,237.66,122.34ZM160,188.69V152a8,8,0,0,0-8-8H40V112H152a8,8,0,0,0,8-8V67.31L220.69,128ZM40,144H152V112H40Z"></path></svg>
+                            ¿Necesitás inspiración? Usá las ayudas antes de empezar.
+                        </div>
+
+                        <!-- Botón 1: Redirige a pantalla9a.html -->
+                        <a href="pantalla9a.html" class="btn-ayuda-compacto">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Repasar las claves del héroe
+                        </a>
+
+                        <!-- Botón 2: Pantalla 9 -->
+                        <a href="pantalla9.html" class="btn-ayuda-compacto">
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            Repasar el mito y sus partes
+                        </a>
+
+                        <!-- Botón 3: Pantalla 10 -->
+                        <a href="pantalla10.html" class="btn-ayuda-compacto">
+                            <svg viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+                            Sustantivos y Adjetivos
+                        </a>
+
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla7.html" class="btn-retroceso-sutil">← Volver</a>
+            <a href="pantalla11.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+
+    </main>
+
+    <script src="js/global.js"></script>
+</body>
+</html>

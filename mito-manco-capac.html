@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manco Cápac y los hermanos Ayar - Libro Digital</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ENTORNO GLOBAL Y DECORACIÓN EDITORIAL (Estilo Oro y Piedra Inca)
+           ========================================================================== */
+        .pantalla-lectura {
+            background-color: #E8E6E1; /* Tono piedra claro/pergamino */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            overflow: hidden;
+            align-items: stretch !important; 
+            /* Patrón de líneas escalonadas sutiles (simbolizando andenes/cerros) */
+            background-image: repeating-linear-gradient(45deg, rgba(139, 101, 8, 0.04) 25%, transparent 25%, transparent 75%, rgba(139, 101, 8, 0.04) 75%, rgba(139, 101, 8, 0.04)), 
+                              repeating-linear-gradient(45deg, rgba(139, 101, 8, 0.04) 25%, transparent 25%, transparent 75%, rgba(139, 101, 8, 0.04) 75%, rgba(139, 101, 8, 0.04));
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+        }
+
+        .pantalla-lectura::after {
+            content: "";
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid rgba(139, 101, 8, 0.2);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .barra-superior-lectura {
+            background-color: var(--color-blanco);
+            border-bottom: 3px double #8B6508; /* Borde doble dorado oscuro */
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(15, 43, 55, 0.06);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-regresar-galeria {
+            background-color: #3E3A35; /* Tono piedra oscuro */
+            color: var(--color-blanco);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 0;
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-regresar-galeria:hover {
+            background-color: #8B6508; /* Dorado oscuro al hover */
+        }
+
+        /* ==========================================================================
+           ZONA DEL LIBRO
+           ========================================================================== */
+        .zona-libro-interactivo {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            position: relative;
+            box-sizing: border-box;
+            height: calc(100vh - 120px); 
+            width: 100%;
+            z-index: 10;
+        }
+
+        .hoja-libro {
+            background-color: #FDFBF7; 
+            width: 100%;
+            max-width: 900px; 
+            flex-shrink: 0; 
+            height: 100%;
+            min-height: 480px; 
+            max-height: 580px; 
+            position: relative;
+            border: 1px solid #D3CCC0;
+            box-shadow: 10px 10px 0 rgba(62, 58, 53, 0.1); 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            z-index: 5;
+            perspective: 1200px; 
+        }
+
+        .hoja-libro::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 25px;
+            background: linear-gradient(to right, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.02) 50%, transparent 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .linea-lomo-central {
+            position: absolute;
+            top: 0; bottom: 0; left: 35px; width: 1px;
+            background-color: rgba(139, 101, 8, 0.2);
+            border-right: 1px solid var(--color-blanco);
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .libro-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        .pagina-cuento {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 35px 50px 35px 85px; 
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px) rotateY(-12deg); 
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+            backface-visibility: hidden;
+        }
+
+        .pagina-cuento.activa {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) rotateY(0deg);
+        }
+
+        .pagina-cuento.salida-atras {
+            transform: translateX(-40px) rotateY(12deg);
+            opacity: 0;
+        }
+
+        /* ==========================================================================
+           TIPOGRAFÍA EDITORIAL
+           ========================================================================== */
+        .titulo-pagina {
+            font-family: var(--fuente-titulos);
+            font-size: 1.8rem; 
+            color: #8B6508;
+            margin: 0 0 5px 0;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .subtitulo-pagina {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: #3E3A35;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 15px 0; 
+            border-bottom: 1px solid rgba(139, 101, 8, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .prosa-paginada {
+            font-family: var(--fuente-lectura);
+            font-size: 1.15rem; 
+            line-height: 1.5; 
+            color: #2D2D2D;
+            text-align: justify; 
+            font-weight: 300;
+            flex-grow: 1;
+            overflow-y: hidden; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+        }
+
+        .prosa-paginada p {
+            margin: 0 0 15px 0; 
+        }
+
+        .capitular::first-letter {
+            font-family: var(--fuente-titulos);
+            font-size: 3rem; 
+            float: left;
+            margin: 8px 8px 0 0;
+            line-height: 0.8;
+            color: #8B6508;
+        }
+
+        /* ==========================================================================
+           CONTROLES INTERACTIVOS
+           ========================================================================== */
+        .btn-hoja {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #8B6508;
+            z-index: 50;
+            padding: 10px;
+            transition: color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 25px;
+            flex-shrink: 0;
+            background-color: var(--color-blanco);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .btn-hoja:hover {
+            color: #3E3A35;
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-hoja:disabled {
+            color: #D3CCC0;
+            background-color: transparent;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .btn-hoja svg {
+            width: 36px;
+            height: 36px;
+            fill: currentColor;
+        }
+
+        .contador-paginas {
+            position: absolute;
+            bottom: 15px;
+            right: 35px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: #8B6508;
+            font-weight: 600;
+            z-index: 30;
+            background-color: rgba(139, 101, 8, 0.08);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="pantalla-lectura">
+
+    <nav class="barra-superior-lectura">
+        <span style="font-family: var(--fuente-lectura); color: #8B6508; font-size: 0.9rem; font-weight: 600;">Biblioteca de Mitos - Lectura</span>
+        <a href="pantalla7.html" class="btn-regresar-galeria">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
+            Volver a la biblioteca
+        </a>
+    </nav>
+
+    <section class="zona-libro-interactivo">
+        
+        <button class="btn-hoja" id="backPage" disabled aria-label="Página anterior">
+            <svg viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path></svg>
+        </button>
+
+        <div class="hoja-libro">
+            <div class="linea-lomo-central"></div>
+            
+            <div class="libro-track">
+                
+                <!-- PÁGINA 1 -->
+                <div class="pagina-cuento activa">
+                    <h1 class="titulo-pagina">Manco Cápac</h1>
+                    <h2 class="subtitulo-pagina">y los hermanos Ayar</h2>
+                    <div class="prosa-paginada">
+                        <p class="capitular">Hace muchísimo tiempo, cuando el mundo aún estaba formándose, el dios Viracocha, creador de todas las cosas, decidió que era momento de dar origen a un gran pueblo que viviera en armonía con la naturaleza y honrara a los dioses.</p>
+                        <p>Para cumplir esa misión llamó a sus hijos y les dijo:</p>
+                        <p>—Deben encontrar una tierra fértil donde pueda crecer el maíz, el alimento más valioso para nuestro pueblo. Allí fundarán una gran ciudad desde la que nacerá un poderoso imperio.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 2 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Entre ellos se encontraba Manco Cápac, el hermano mayor. Era un guía prudente, responsable y respetado por su familia. Antes de partir, Viracocha le entregó un bastón de oro.</p>
+                        <p>—Cuando este bastón se hunda fácilmente en la tierra —le explicó—, sabrás que ese será el lugar elegido por los dioses para establecer a nuestro pueblo.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 3 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Junto con sus hermanos Ayar Cachi, Ayar Uchu y Ayar Auca, y acompañados por sus esposas, emprendieron un largo viaje desde la cueva de Pacaritambo, lugar del que, según el mito, habían surgido por voluntad divina.</p>
+                        <p>El camino fue difícil y estuvo lleno de desafíos.</p>
+                        <p>Ayar Cachi era muy fuerte, pero también orgulloso, impulsivo y violento. Sus hermanos comenzaron a temer que su carácter pusiera en peligro la misión. Entonces idearon un plan para hacerlo regresar a la cueva y allí quedó encerrado para siempre.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 4 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Aunque la pérdida de su hermano fue dolorosa, Manco Cápac no abandonó la misión que le habían confiado los dioses y continuó guiando al grupo.</p>
+                        <p>Tiempo después llegaron al cerro Huanacauri. Allí, Ayar Uchu desobedeció el carácter sagrado del lugar y quedó convertido en piedra. Más adelante, Ayar Auca desplegó unas grandes alas para explorar el valle, pero al posarse sobre una roca también quedó transformado en piedra.</p>
+                        <p>Según la tradición inca, esos lugares se convirtieron en sitios sagrados que recordaban el origen del pueblo.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 5 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Finalmente, Manco Cápac, acompañado por las mujeres de la familia, llegó a un amplio valle rodeado de montañas. Cuando clavó el bastón de oro en la tierra, este se hundió sin esfuerzo.</p>
+                        <p>Habían encontrado el lugar señalado por los dioses.</p>
+                        <p>Allí fundaron la ciudad del Cusco, cuyo nombre significa "ombligo" en lengua quechua, porque los incas la consideraban el centro de su mundo.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 6 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Desde esa ciudad comenzó a crecer el Tahuantinsuyo, el gran Imperio inca.</p>
+                        <p>Los incas contaban este mito para explicar el origen de su pueblo y recordar que Manco Cápac, elegido por los dioses, había guiado con sabiduría, valentía y perseverancia a su familia hasta encontrar la tierra prometida.</p>
+                        <p>Por eso, para ellos, Manco Cápac no era solamente un fundador: era un héroe cuya misión había dado comienzo a la historia de todo un pueblo.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="contador-paginas" id="pageIndicator">Pág. 1 de 6</div>
+        </div>
+
+        <button class="btn-hoja" id="nextPage" aria-label="Siguiente página">
+            <svg viewBox="0 0 256 256"><path d="M90.34,53.66a8,8,0,0,1,11.32-11.32l80,80a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32-11.32L164.69,128Z"></path></svg>
+        </button>
+
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const paginas = document.querySelectorAll('.pagina-cuento');
+            const btnPrev = document.getElementById('backPage');
+            const btnNext = document.getElementById('nextPage');
+            const indicador = document.getElementById('pageIndicator');
+            
+            let paginaActual = 0;
+            const totalPaginas = paginas.length;
+
+            const cambiarPagina = (nuevaPagina) => {
+                paginas[paginaActual].classList.remove('activa', 'salida-atras');
+                
+                if (nuevaPagina > paginaActual) {
+                    paginas[paginaActual].classList.add('salida-atras');
+                }
+
+                paginaActual = nuevaPagina;
+
+                paginas[paginaActual].classList.add('activa');
+                paginas[paginaActual].classList.remove('salida-atras');
+
+                btnPrev.disabled = paginaActual === 0;
+                btnNext.disabled = paginaActual === totalPaginas - 1;
+
+                indicador.textContent = `Pág. ${paginaActual + 1} de ${totalPaginas}`;
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (paginaActual < totalPaginas - 1) {
+                    cambiarPagina(paginaActual + 1);
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (paginaActual > 0) {
+                    cambiarPagina(paginaActual - 1);
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

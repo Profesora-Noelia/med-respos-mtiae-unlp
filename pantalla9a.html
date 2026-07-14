@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claves del Héroe y su Viaje - Guía de Escritura</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT DE LA PANTALLA (CERO SCROLL VERTICAL)
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center;
+            padding: 15px 45px; 
+            box-sizing: border-box;
+            height: calc(100vh - 190px); /* Ajuste exacto para evitar el desborde en pantallas notebooks */
+        }
+
+        .envoltura-centrada {
+            margin: auto; 
+            width: 100%;
+            max-width: 850px;
+            position: relative;
+        }
+
+        /* Trama decorativa de puntos en la esquina inferior */
+        .trama-puntos-arte {
+            position: absolute; top: -15px; right: -15px; width: 90px; height: 90px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-coral {
+            position: absolute; top: 12px; left: 12px; width: 100%; height: 100%;
+            background-color: rgba(255, 107, 107, 0.12); border-radius: 8px; z-index: 2;
+        }
+
+        /* ==========================================================================
+           CONTENEDOR MAESTRO DEL CARRUSEL
+           ========================================================================== */
+        .wrapper-carrusel-maestro {
+            position: relative;
+            background-color: var(--color-blanco);
+            border-radius: 6px;
+            border: 4px solid var(--color-blanco);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            z-index: 5;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .carrusel-track-heroe {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            width: 100%;
+        }
+
+        .slide-heroe {
+            min-width: 100%;
+            padding: 30px 60px 15px 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Estilos del contenido interno */
+        .slide-heroe h4 {
+            font-family: var(--fuente-titulos);
+            font-size: 1.2rem;
+            color: var(--color-petroleo);
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.15);
+            padding-bottom: 8px;
+        }
+
+        .slide-heroe h4 svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: var(--color-coral);
+            stroke-width: 2;
+        }
+
+        .slide-heroe p {
+            font-family: var(--fuente-lectura);
+            font-size: 1.15rem;
+            line-height: 1.45;
+            color: var(--color-texto-cuerpo);
+            margin: 0 0 12px 0;
+            font-weight: 300;
+            text-align: justify;
+        }
+
+        /* Listados y bloques de realce */
+        .bloque-concepto-heroe {
+            background-color: #FDFBF7;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border-left: 4px solid var(--color-coral);
+            margin-bottom: 8px;
+        }
+
+        .bloque-concepto-heroe.variante {
+            border-left-color: var(--color-petroleo);
+        }
+
+        .bloque-concepto-heroe strong {
+            font-family: var(--fuente-lectura);
+            color: var(--color-petroleo);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.9rem;
+        }
+
+        .bloque-concepto-heroe p {
+            font-size: 1.15rem;
+            line-height: 1.35;
+            margin: 0;
+        }
+
+        /* ==========================================================================
+           CONTROLES DEL CARRUSEL
+           ========================================================================== */
+        .btn-carrusel-flecha {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-blanco);
+            border: 1px solid rgba(28, 78, 101, 0.2);
+            cursor: pointer;
+            color: var(--color-coral);
+            z-index: 10;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .btn-carrusel-flecha:hover { color: var(--color-petroleo); transform: translateY(-50%) scale(1.1); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+        .btn-carrusel-flecha:disabled { color: var(--color-hielo); border-color: transparent; cursor: not-allowed; transform: translateY(-50%) scale(1); box-shadow: none; }
+        .btn-prev { left: -18px; }
+        .btn-next { right: -18px; }
+        .btn-carrusel-flecha svg { width: 24px; height: 24px; fill: currentColor; }
+
+        .indicadores-carrusel-puntos {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 0 12px 0;
+        }
+
+        .punto-indicador-item {
+            width: 8px; height: 8px; border-radius: 50%;
+            background-color: var(--color-hielo); transition: 0.3s ease;
+        }
+        .punto-indicador-item.activo { background-color: var(--color-petroleo); }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <!-- Botón de Control Izquierdo -->
+                <button class="btn-carrusel-flecha btn-prev" id="btnPrevHeroe" disabled aria-label="Anterior">
+                    <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm32-88a8,8,0,0,1-8,8H115.31l18.35,18.34a8,8,0,0,1-11.32,11.32l-32-32a8,8,0,0,1,0-11.32l32-32a8,8,0,0,1,11.32,11.32L115.31,120H152A8,8,0,0,1,160,128Z"></path></svg>
+                </button>
+
+                <div class="contenedor-carrusel-editorial">
+                    <div class="trama-puntos-arte"></div>
+                    <div class="offset-sombra-coral"></div>
+                    
+                    <div class="wrapper-carrusel-maestro">
+                        <div class="carrusel-track-heroe" id="trackHeroe">
+                            
+                            <!-- SLIDE 1: ¿Qué hace a un héroe? -->
+                            <div class="slide-heroe">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                                    Características de un héroe o heroína
+                                </h4>
+                                <p>Antes de inventar a tu personaje para el relato, repasemos las características fundamentales que definen su arquetipo:</p>
+                                
+                                <div class="bloque-concepto-heroe">
+                                    <strong>Propósito noble</strong>
+                                    <p>Actúan con determinación y valentía para proteger la naturaleza, asistir a su comunidad o reparar una gran injusticia en el mundo.</p>
+                                </div>
+                                <div class="bloque-concepto-heroe variante">
+                                    <strong>Enfrentamiento de miedos</strong>
+                                    <p>No son personajes perfectos o que no tienen temor. Al contrario, avanzan y resuelven desafíos a pesar de tener debilidades o miedos.</p>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 2: El Viaje - Parte I -->
+                            <div class="slide-heroe">
+                                <h4>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    El Camino del Héroe
+                                </h4>
+                                <p>Casi todas las grandes aventuras de la literatura clásica y moderna se organizan siguiendo una estructura circular estructurada:</p>
+                                
+                                <div class="bloque-concepto-heroe">
+                                    <strong>1. El Mundo Ordinario</strong>
+                                    <p>La narración se inicia mostrando el contexto regular y la rutina cotidiana del personaje, estableciendo cómo vive antes de que ocurra el gran cambio.</p>
+                                </div>
+                                <div class="bloque-concepto-heroe variante">
+                                    <strong>2. El Llamado a la Aventura</strong>
+                                    <p>Surge un acontecimiento o una complicación imprevista. El protagonista recibe una misión, un mensaje o un desafío directo que lo obliga a salir de su entorno seguro.</p>
+                                </div>
+                            </div>
+
+                            <!-- SLIDE 3: El Viaje - Parte II -->
+                            <div class="slide-heroe">
+                                <h4>
+                                   
+                                    
+                                </h4>
+                                <p>Una vez aceptada la misión, el personaje ingresa a un escenario completamente desconocido para afrontar la resolución de su búsqueda:</p>
+                                
+                                <div class="bloque-concepto-heroe">
+                                    <strong>3. Las Pruebas y la Crisis</strong>
+                                    <p>El héroe se adentra en el mundo especial. Aquí debe resolver acertijos complejos, confrontar a oponentes o fuerzas de la naturaleza, y superar su peor flaqueza.</p>
+                                </div>
+                                <div class="bloque-concepto-heroe variante">
+                                    <strong>4. El Retorno y la Transformación</strong>
+                                    <p>Tras triunfar en su misión, resolver el conflicto y adquirir un nuevo aprendizaje, el personaje regresa a su hogar inicial cambiado. La experiencia lo ha transformado por completo.</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Indicadores de posición inferiores -->
+                        <div class="indicators-container">
+                            <div class="indicadores-carrusel-puntos" id="indicadoresHeroe">
+                                <div class="punto-indicador-item activo"></div>
+                                <div class="punto-indicador-item"></div>
+                                <div class="punto-indicador-item"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Botón de Control Derecho -->
+                <button class="btn-carrusel-flecha btn-next" id="btnNextHeroe" aria-label="Siguiente">
+                    <svg viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm45.66-93.66a8,8,0,0,1,0,11.32l-32,32a8,8,0,0,1-11.32-11.32L140.69,136H104a8,8,0,0,1,0-16h36.69l-10.35-10.34a8,8,0,0,1,11.32-11.32Z"></path></svg>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL EXCLUSIVA (VOLVER A LAS AYUDAS) -->
+        <nav class="barra-navegacion-fija">
+            <a href="pantalla8.html" class="btn-retroceso-sutil">← Volver al Menú de Ayudas</a>
+        </nav>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('trackHeroe');
+            const btnPrev = document.getElementById('btnPrevHeroe');
+            const btnNext = document.getElementById('btnNextHeroe');
+            const puntos = document.querySelectorAll('.punto-indicador-item');
+            const slides = document.querySelectorAll('.slide-heroe');
+            
+            let currentIndex = 0;
+            const totalSlides = slides.length;
+
+            const actualizarCarrusel = () => {
+                track.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                btnPrev.disabled = currentIndex === 0;
+                btnNext.disabled = currentIndex === totalSlides - 1;
+
+                puntos.forEach((punto, index) => {
+                    if(index === currentIndex) {
+                        punto.classList.add('activo');
+                    } else {
+                        punto.classList.remove('activo');
+                    }
+                });
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    actualizarCarrusel();
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    actualizarCarrusel();
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teseo, héroe entre los héroes - Libro Digital Interactivo</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           ENTORNO GLOBAL Y DECORACIÓN EDITORIAL (Estilo Clásico)
+           ========================================================================== */
+        .pantalla-lectura {
+            background-color: #E8E0D5; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            overflow: hidden;
+            align-items: stretch !important; 
+            background-image: repeating-linear-gradient(45deg, rgba(28, 78, 101, 0.03) 25%, transparent 25%, transparent 75%, rgba(28, 78, 101, 0.03) 75%, rgba(28, 78, 101, 0.03)), repeating-linear-gradient(45deg, rgba(28, 78, 101, 0.03) 25%, transparent 25%, transparent 75%, rgba(28, 78, 101, 0.03) 75%, rgba(28, 78, 101, 0.03));
+            background-position: 0 0, 20px 20px;
+            background-size: 40px 40px;
+        }
+
+        .pantalla-lectura::after {
+            content: "";
+            position: absolute;
+            top: 15px; left: 15px; right: 15px; bottom: 15px;
+            border: 2px solid rgba(28, 78, 101, 0.15);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .barra-superior-lectura {
+            background-color: var(--color-blanco);
+            border-bottom: 3px double var(--color-petroleo); 
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(15, 43, 55, 0.06);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-regresar-galeria {
+            background-color: var(--color-petroleo);
+            color: var(--color-blanco);
+            border: none;
+            padding: 10px 22px;
+            border-radius: 0;
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-regresar-galeria:hover {
+            background-color: var(--color-coral);
+        }
+
+        /* ==========================================================================
+           ZONA DEL LIBRO
+           ========================================================================== */
+        .zona-libro-interactivo {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 40px;
+            position: relative;
+            box-sizing: border-box;
+            height: calc(100vh - 120px); 
+            width: 100%;
+            z-index: 10;
+        }
+
+        .hoja-libro {
+            background-color: #FDFBF7; 
+            width: 100%;
+            max-width: 900px; 
+            flex-shrink: 0; 
+            height: 100%;
+            min-height: 480px; 
+            max-height: 580px; 
+            position: relative;
+            border: 1px solid #D3CCC0;
+            box-shadow: 10px 10px 0 rgba(28, 78, 101, 0.08); 
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            z-index: 5;
+            perspective: 1200px; 
+        }
+
+        .hoja-libro::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; bottom: 0; width: 25px;
+            background: linear-gradient(to right, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.02) 50%, transparent 100%);
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        .linea-lomo-central {
+            position: absolute;
+            top: 0; bottom: 0; left: 35px; width: 1px;
+            background-color: rgba(28, 78, 101, 0.15);
+            border-right: 1px solid var(--color-blanco);
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        .libro-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            box-sizing: border-box;
+        }
+
+        .pagina-cuento {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            padding: 35px 50px 35px 85px; /* Ajuste: Menos padding arriba y abajo para que entre el texto */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(40px) rotateY(-12deg); 
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
+            backface-visibility: hidden;
+        }
+
+        .pagina-cuento.activa {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) rotateY(0deg);
+        }
+
+        .pagina-cuento.salida-atras {
+            transform: translateX(-40px) rotateY(12deg);
+            opacity: 0;
+        }
+
+        /* ==========================================================================
+           TIPOGRAFÍA EDITORIAL (AJUSTADA PARA NO CORTAR TEXTO)
+           ========================================================================== */
+        .titulo-pagina {
+            font-family: var(--fuente-titulos);
+            font-size: 1.8rem; /* Ajuste: Ligeramente más pequeño */
+            color: var(--color-petroleo);
+            margin: 0 0 5px 0;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        .subtitulo-pagina {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: var(--color-coral);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0 0 15px 0; /* Ajuste: Menos margen inferior */
+            border-bottom: 1px solid rgba(255, 107, 107, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .prosa-paginada {
+            font-family: var(--fuente-lectura);
+            font-size: 1.1rem; /* Ajuste: Tamaño reducido para evitar desbordes */
+            line-height: 1.45; /* Ajuste: Altura de línea más compacta */
+            color: #2D2D2D;
+            text-align: justify; 
+            font-weight: 300;
+            flex-grow: 1;
+            overflow-y: hidden; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+        }
+
+        .prosa-paginada p {
+            margin: 0 0 10px 0; /* Ajuste: Menos espacio entre párrafos */
+        }
+
+        .capitular::first-letter {
+            font-family: var(--fuente-titulos);
+            font-size: 3rem; /* Ajuste de capitular */
+            float: left;
+            margin: 8px 8px 0 0;
+            line-height: 0.8;
+            color: var(--color-petroleo);
+        }
+
+        /* ==========================================================================
+           CONTROLES INTERACTIVOS
+           ========================================================================== */
+        .btn-hoja {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-coral);
+            z-index: 50;
+            padding: 10px;
+            transition: color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 25px;
+            flex-shrink: 0;
+            background-color: var(--color-blanco);
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .btn-hoja:hover {
+            color: var(--color-petroleo);
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-hoja:disabled {
+            color: #D3CCC0;
+            background-color: transparent;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+
+        .btn-hoja svg {
+            width: 36px;
+            height: 36px;
+            fill: currentColor;
+        }
+
+        .contador-paginas {
+            position: absolute;
+            bottom: 15px;
+            right: 35px;
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem;
+            color: var(--color-petroleo);
+            font-weight: 600;
+            z-index: 30;
+            background-color: rgba(28, 78, 101, 0.05);
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body class="pantalla-lectura">
+
+    <nav class="barra-superior-lectura">
+        <span style="font-family: var(--fuente-lectura); color: var(--color-petroleo); font-size: 0.9rem; font-weight: 600;">Biblioteca de Mitos - Lectura</span>
+        <a href="pantalla7.html" class="btn-regresar-galeria">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg>
+            Volver a la biblioteca
+        </a>
+    </nav>
+
+    <section class="zona-libro-interactivo">
+        
+        <button class="btn-hoja" id="backPage" disabled aria-label="Página anterior">
+            <svg viewBox="0 0 256 256"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"></path></svg>
+        </button>
+
+        <div class="hoja-libro">
+            <div class="linea-lomo-central"></div>
+            
+            <div class="libro-track">
+                
+                <!-- PÁGINA 1 -->
+                <div class="pagina-cuento activa">
+                    <h1 class="titulo-pagina">Teseo</h1>
+                    <h2 class="subtitulo-pagina">héroe entre los héroes</h2>
+                    <div class="prosa-paginada">
+                        <p>Egeo, rey de Atenas, supo por boca del oráculo que no debía casarse lejos de su tierra... La unión del rey con una extranjera, afirmó el oráculo, traería grandes desgracias a Atenas y al pueblo ateniense. Sin embargo, el joven rey se enamoró de Etra, la hija menor del rey de Trecén y se unió a ella sin pensar en las amenazantes predicciones.</p>
+                        <p>Un día, cuando ya estaba a punto de nacer el hijo de Egeo y Etra, Egeo supo que debía regresar a Atenas. Llevó a su esposa a las afueras de Trecén, se detuvo junto a una inmensa roca y así habló: —Esposa mía, bajo esta roca ocultaré mis sandalias y mi espada. Si el niño que está por nacer es varón, tráelo a este lugar cuando sea un joven y ordénale que las desentierre. Cuando lo vea vistiendo mis prendas, sabré que es mi hijo y lo haré heredero de mi reino, Atenas, al que debo regresar ahora.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 2 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Poco tiempo después nació Teseo; se crió en el palacio de su abuelo sin conocer a su padre y, desde muy pequeño, recibió la especial protección de Poseidón, dios del mundo de los mares. Teseo se destacó como un niño fuerte y valiente. Su abuelo, el rey de Trecén, le enseñó a conocer las estrellas, a lanzar la jabalina y a empuñar la espada.</p>
+                        <p>Un día, cuando Teseo tenía siete años, Hércules llegó de visita al palacio; al entrar, dejó sobre uno de los bancos del jardín la piel del león de Nemea con la que siempre se cubría desde que había derrotado al temible león.</p>
+                        <p>Los niños vieron la figura de la bestia recostada sobre el banco y huyeron despavoridos gritando: “¡Un león, un león!“</p>
+                        <p>Teseo, sin embargo, corrió hacia la cocina, tomó de allí un cuchillo y volvió con él al jardín dispuesto a vencer a la fiera. Hércules quedó admirado de la valentía del niño y aseguró que el nombre de Teseo se recordaría por siempre entre los nombres de los héroes.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 3 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Cuando Teseo cumplió dieciséis años, Etra, su madre, lo llevó hacia las afueras de Trecén y mostrándole la inmensa roca le dijo: —Hijo mío, debajo de esa roca encontrarás las sandalias y la espada de tu padre que no es otro que Egeo, el rey de Atenas. Recupera esas prendas y preséntate ante Egeo que reconocerá en ti a su hijo.</p>
+                        <p>Con un enorme esfuerzo Teseo corrió la roca. Allí estaban las sandalias y la espada de su padre. Se las calzó, dio un fuerte abrazo a su madre y, sin dejarse ganar por la tristeza de la separación, emprendió la marcha.</p>
+                        <p>Teseo se dirigió a Atenas por el camino de tierra, plagado de peligros; deseaba demostrar su valentía e imitar a Hércules, a quien mucho admiraba. No le faltaron ocasiones.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 4 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>El primero en probar el filo de su espada fue Escirón, un poderoso salteador de caminos. Lo siguió el gigante Sinis, a quien llamaban el “doblador de pinos” pues solía aplastar a sus enemigos entre dos inmensos pinos a los que unía entre sí con el solo movimiento de uno de sus brazos. Sin duda, Poseidón, protector de Teseo, lo custodió a lo largo del camino.</p>
+                        <p>En el palacio se celebraba un gran banquete el día en que llegó Teseo. Su padre, el rey Egeo, ocupaba el lugar principal.</p>
+                        <p>El joven no había revelado a nadie su nombre; al llegar ante la mesa desenvainó su espada. Tuvo que apartar de sí a quienes querían echarlo fuera antes de lograr cortar con la punta del arma una pata del cordero que Egeo tenía ante sus ojos, en una fuente de plata. El rey reconoció la espada, miró los pies del desconocido y supo que el apuesto joven era su propio hijo. Levantándose lo abrazó una y otra vez, y lo proclamó su heredero.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 5 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Desde entonces, Teseo luchó para fortalecer en Atenas la autoridad de su padre.</p>
+                        <p>Atenas padecía por entonces una gran penuria anunciada ya por el oráculo. Minos, el rey de Creta, había vencido a los atenienses en una guerra y les había impuesto un terrible castigo. Cada año, los atenienses debían enviar a siete jóvenes y siete doncellas para que fueran devorados en Creta por el Minotauro.</p>
+                        <p>El Minotauro era un ser monstruoso, con cuerpo de hombre y cabeza de toro; emitía por su boca extraños ruidos no articulados, mezcla de bufido y ronquido, en los que se adivinaba un soplo humano de tristeza. Se alimentaba con carne humana. Vivía encerrado en el Laberinto, complicada construcción en la que era fácil entrar pero imposible salir.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 6 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Cuando Teseo supo de la desgracia que hería al pueblo de su padre, decidió viajar él mismo a Creta para luchar contra el Minotauro y librar del mal a Atenas.</p>
+                        <p>—Teseo, hijo bienamado –dijo Egeo– que los dioses te protejan. La nave que te conduce lleva velas negras. Cuando regreses vencedor del Minotauro, cámbialas por velas blancas. De ese modo, a la distancia, conoceré la noticia de tu victoria.</p>
+                        <p>Teseo prometió a su padre que cambiaría las velas como señal de su triunfo y zarpó, junto a los otros jóvenes, rumbo a Creta.</p>
+                        <p>El rey Minos recibió a los atenienses ataviado con bellas ropas blancas; deseaba conocer al joven Teseo, de cuya valentía había oído hablar. Para impresionarlo, le dijo de manera burlona mientras arrojaba al agua su anillo: —Me han dicho, Teseo, que el dios Poseidón te favorece. Si es cierto, dile que te ayude a recuperar este anillo.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 7 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Teseo le respondió: —Demuestra tú primero que el mismo Zeus, padre de todos los dioses, te tiene bajo su protección. Zeus, que verdaderamente era protector de Minos, no se hizo esperar: arrojó desde los cielos rayos y truenos que iluminaron el mar y levantaron en él olas gigantescas que sacudieron sin cesar la nave ateniense.</p>
+                        <p>Teseo se arrojó entonces al mar. Allí, Poseidón lo recibió con alegría. Estaba sentado en un carro de oro tirado por bellas sirenas. Bastó una señal suya para que un veloz pez plateado recuperara el anillo. Segundos después, Teseo emergió de las aguas con el anillo en una de sus manos y frágiles estrellas de mar escabulléndose entre los dedos de la otra.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 8 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Teseo y sus compañeros debieron aguardar al día siguiente para combatir con el Minotauro.</p>
+                        <p>Durante la noche, la joven Ariadna, hija del rey de Creta, apareció entre los árboles. La belleza de Teseo, saliendo deslumbrante del mar aquella mañana, había despertado un amor incontenible en su corazón.</p>
+                        <p>—Valiente Teseo –le dijo– podrás vencer, sin duda, al poderoso Minotauro con tu espada y tu valentía. Pero no saldrás jamás del Laberinto. Te entrego este ovillo; es un ovillo mágico. Ata la punta del hilo a la puerta del laberinto y conserva el ovillo en tu mano. El hilo se irá desenrollando cuando camines por los corredores del Laberinto y, cuando desees volver, te bastará seguir el hilo para hallar la salida.</p>
+                        <p>A la hora señalada, Teseo entró en el Laberinto. En una mano llevaba la espada de su padre y en la otra el ovillo de Ariadna.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 9 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Desde lejos escuchó los mugidos del Minotauro pero sólo se enfrentó con él después de llegar al centro mismo del Laberinto. El combate duró largas horas. La bestia arremetía contra el joven clavándole sus cuernos y empujándole con fuerza sobrehumana. Teseo resistió sus embates. Cuando logró separarse del monstruo, tomó fuerzas, se lanzó sobre su adversario con la espada en alto y le atravesó el corazón. El Minotauro cayó muerto.</p>
+                        <p>Teseo siguió el hilo de Ariadna para hallar el camino de regreso. Ariadna y los jóvenes y las doncellas atenienses que se habían librado de una terrible muerte abrazaron a Teseo en la puerta del Laberinto. Sigilosamente, subieron a bordo de su nave y esa misma noche huyeron hacia Atenas. Ariadna viajaba junto al joven héroe.</p>
+                    </div>
+                </div>
+
+                <!-- PÁGINA 10 -->
+                <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Al llegar a la isla de Naxos, sin embargo, algo interrumpió su dicha. Dionisio, uno de los dioses del Olimpo, vio a la princesa y deseó inmediatamente casarse con ella. La joven se despidió llorando de Teseo. El dios Dionisio bajó a la isla con un carro maravilloso tirado por fantásticas panteras aladas y en él se llevó a Ariadna hacia el Olimpo para convertirla en su esposa.</p>
+                        <p>Los atenienses siguieron viaje sin dejar de festejar la victoria sobre el Minotauro. La alegría hizo que Teseo olvidara la promesa que había hecho a su padre: la nave avanzaba hacia Atenas con sus negras velas desplegadas al viento. Desde lo alto de la ciudad, Egeo la divisó. Su corazón se estremeció de dolor al pensar que su amado hijo había muerto en Creta. Sin poder soportar la pena, Egeo se arrojó al mar, a ese mar que baña las costas de Grecia y que, desde entonces, lleva su nombre.</p>
+                    </div>
+                </div>
+
+                 <!-- PÁGINA 11 -->
+                 <div class="pagina-cuento">
+                    <div class="prosa-paginada">
+                        <p>Cuando Teseo desembarcó, supo la noticia de la muerte de su padre. En medio de esta nueva tristeza, el joven héroe fue proclamado rey de Atenas. Teseo fue un buen rey pero su reinado estuvo plagado de luchas y tragedias, como lo había estado su nacimiento, marcado a la vez con el signo de la gloria y con la sombra de la desgracia.</p>
+                        <p style="text-align: right; font-size: 0.85rem; font-style: italic; color: #777; margin-top: 30px; border-top: 1px solid #eee; padding-top: 10px;">Ministerio de Educación, GCBA. (2007). Prácticas del Lenguaje. Mitos griegos.</p>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div class="contador-paginas" id="pageIndicator">Pág. 1 de 11</div>
+        </div>
+
+        <button class="btn-hoja" id="nextPage" aria-label="Siguiente página">
+            <svg viewBox="0 0 256 256"><path d="M90.34,53.66a8,8,0,0,1,11.32-11.32l80,80a8,8,0,0,1,0,11.32l-80,80a8,8,0,0,1-11.32-11.32L164.69,128Z"></path></svg>
+        </button>
+
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const paginas = document.querySelectorAll('.pagina-cuento');
+            const btnPrev = document.getElementById('backPage');
+            const btnNext = document.getElementById('nextPage');
+            const indicador = document.getElementById('pageIndicator');
+            
+            let paginaActual = 0;
+            const totalPaginas = paginas.length;
+
+            const cambiarPagina = (nuevaPagina) => {
+                paginas[paginaActual].classList.remove('activa', 'salida-atras');
+                
+                if (nuevaPagina > paginaActual) {
+                    paginas[paginaActual].classList.add('salida-atras');
+                }
+
+                paginaActual = nuevaPagina;
+
+                paginas[paginaActual].classList.add('activa');
+                paginas[paginaActual].classList.remove('salida-atras');
+
+                btnPrev.disabled = paginaActual === 0;
+                btnNext.disabled = paginaActual === totalPaginas - 1;
+
+                indicador.textContent = `Pág. ${paginaActual + 1} de ${totalPaginas}`;
+            };
+
+            btnNext.addEventListener('click', () => {
+                if (paginaActual < totalPaginas - 1) {
+                    cambiarPagina(paginaActual + 1);
+                }
+            });
+
+            btnPrev.addEventListener('click', () => {
+                if (paginaActual > 0) {
+                    cambiarPagina(paginaActual - 1);
+                }
+            });
+        });
+    </script>
+    <script src="js/global.js"></script>
+</body>
+</html>

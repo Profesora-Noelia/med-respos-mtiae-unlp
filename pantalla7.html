@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La figura del héroe en los mitos - Biblioteca de Mitos</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           CONTENEDOR PRINCIPAL FIJO
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 40px 40px 20px 40px; 
+            box-sizing: border-box;
+            min-height: calc(100vh - 110px);
+        }
+
+        .envoltura-centrada {
+            margin: 0 auto; 
+            width: 100%;
+            max-width: 1050px; 
+        }
+
+        .encabezado-seccion {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(28, 78, 101, 0.1); 
+        }
+
+        .encabezado-seccion h2 {
+            font-family: var(--fuente-titulos);
+            font-size: 1.9rem;
+            color: var(--color-petroleo);
+            margin: 0 0 5px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .encabezado-seccion p {
+            font-family: var(--fuente-lectura);
+            font-size: 1.05rem; 
+            color: var(--color-texto-cuerpo);
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* ==========================================================================
+           GRILLA EDITORIAL DE FICHAS (3 TARJETAS)
+           ========================================================================== */
+        .grilla-mitos {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .ficha-editorial {
+            background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo);
+            border-top: 5px solid var(--color-petroleo);
+            border-radius: 0; 
+            padding: 20px 22px; 
+            display: flex;
+            flex-direction: column;
+            text-align: left; 
+            position: relative;
+            box-shadow: 4px 4px 0 rgba(28, 78, 101, 0.08); 
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            box-sizing: border-box;
+            text-decoration: none; 
+            min-height: 280px; 
+        }
+
+        .ficha-editorial:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 7px 7px 0 var(--color-coral);
+            border-top-color: var(--color-coral);
+        }
+
+        .tag-arquetipo {
+            color: var(--color-coral);
+            font-family: var(--fuente-titulos);
+            font-size: 0.7rem; 
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .titulo-mito {
+            font-family: var(--fuente-titulos);
+            font-size: 1.2rem; 
+            color: var(--color-petroleo);
+            margin: 0 0 8px 0;
+            line-height: 1.2;
+        }
+
+        .desc-mito {
+            font-family: var(--fuente-lectura);
+            font-size: 0.9rem; 
+            color: var(--color-texto-cuerpo);
+            line-height: 1.45;
+            margin: 0 0 15px 0;
+            flex-grow: 1; 
+            font-weight: 300;
+        }
+
+        .enlace-leer {
+            font-family: var(--fuente-lectura);
+            font-size: 0.85rem; 
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--color-petroleo);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 12px;
+            border-top: 1px dashed rgba(28, 78, 101, 0.2);
+            width: 100%;
+            transition: color 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .ficha-editorial:hover .enlace-leer {
+            color: var(--color-coral);
+        }
+
+        .enlace-leer svg { 
+            width: 16px; 
+            height: 16px; 
+            transition: transform 0.2s ease; 
+        }
+
+        .ficha-editorial:hover .enlace-leer svg { 
+            transform: translateX(4px); 
+        }
+
+        /* ==========================================================================
+           COMPONENTE: BOTÓN DE ACTIVIDAD CORREGIDO (Estilo Coral)
+           ========================================================================== */
+        .btn-actividad-editorial {
+            background-color: var(--color-coral);
+            color: var(--color-blanco);
+            font-family: var(--fuente-lectura);
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-actividad-editorial:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.3);
+            color: var(--color-blanco);
+        }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <section class="zona-contenido-fija">
+            
+            <div class="envoltura-centrada">
+                
+                <header class="encabezado-seccion">
+                    <h2>Nivel 2: Leer y Comparar</h2>
+                    <p>Seleccioná una de las historias para descubrir cómo se manifiesta la figura del héroe.</p>
+                </header>
+
+                <div class="grilla-mitos">
+                    
+                    <!-- MITO 1: Teseo -->
+                    <a href="mito-teseo.html" class="ficha-editorial">
+                        <span class="tag-arquetipo">Héroe Clásico</span>
+                        <h3 class="titulo-mito">Teseo, héroe entre los héroes</h3>
+                        <p class="desc-mito">El joven Teseo viaja voluntariamente a Creta para liberar a Atenas de un terrible castigo. Con la ayuda del hilo mágico de Ariadna, ingresa al Laberinto, vence a la bestia y salva a su pueblo.</p>
+                        <div class="enlace-leer">Leer historia <svg viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></div>
+                    </a>
+
+                    <!-- MITO 2: Kuniraya Wiracocha -->
+                    <a href="mito-kuniraya.html" class="ficha-editorial">
+                        <span class="tag-arquetipo">Mito Andino</span>
+                        <h3 class="titulo-mito">Kuniraya Wiracocha y Kawillaka</h3>
+                        <p class="desc-mito">El poderoso dios Kuniraya, disfrazado de mendigo, fecunda astutamente a la hermosa diosa Kawillaka. Al descubrir la verdad, ella huye hacia el mar, dando inicio a un increíble recorrido lleno de bendiciones y maldiciones.</p>
+                        <div class="enlace-leer">Leer historia <svg viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></div>
+                    </a>
+
+                    <!-- MITO 3: Manco Cápac -->
+                    <a href="mito-manco-capac.html" class="ficha-editorial">
+                        <span class="tag-arquetipo">Héroe Fundador</span>
+                        <h3 class="titulo-mito">Manco Cápac y los hermanos Ayar</h3>
+                        <p class="desc-mito">Elegido por el dios Viracocha y portando un bastón de oro, Manco Cápac lidera a su familia en un arduo viaje lleno de pruebas místicas para encontrar la tierra prometida y fundar el gran Imperio inca.</p>
+                        <div class="enlace-leer">Leer historia <svg viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- BARRA DE NAVEGACIÓN ARMÓNICA Y COMPACTA -->
+        <nav class="barra-navegacion-fija" style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="pantalla6b.html" class="btn-retroceso-sutil">← Volver a los orígenes</a>
+            
+            <!-- Botón de actividad perfectamente maquetado y enlazado a pantalla7b.html -->
+            <a href="pantalla7b.html" class="btn-actividad-editorial">
+                Realizar Actividad 2
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </a>
+            
+            <a href="pantalla8.html" class="btn-navegacion-petroleo" style="font-weight: 600; padding: 14px 30px;">Siguiente →</a>
+        </nav>
+
+    </main>
+
+    <script src="js/global.js"></script>
+</body>
+</html>

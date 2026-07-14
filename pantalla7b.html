@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actividad 2 - Estructurando la Aventura</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&family=Lexend:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/componentes.css">
+
+    <style>
+        /* ==========================================================================
+           LAYOUT Y CONTENEDOR PRINCIPAL
+           ========================================================================== */
+        .zona-contenido-fija { 
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 10px 45px; box-sizing: border-box; height: calc(100vh - 190px); position: relative;
+        }
+
+        .envoltura-centrada {
+            margin: auto; width: 100%; max-width: 950px; height: 100%; 
+            display: flex; align-items: center; position: relative; z-index: 10;
+        }
+
+        .contenedor-editorial-actividad { position: relative; width: 100%; height: 96%; }
+
+        .trama-puntos-esquina {
+            position: absolute; top: -15px; left: -15px; width: 100px; height: 100px;
+            background-image: radial-gradient(var(--color-petroleo) 1.5px, transparent 1.5px);
+            background-size: 15px 15px; opacity: 0.15; z-index: 1; pointer-events: none;
+        }
+
+        .offset-sombra-editorial {
+            position: absolute; top: 12px; left: 12px; width: 100%; height: 100%;
+            background-color: rgba(28, 78, 101, 0.1); border-radius: 0; z-index: 2;
+        }
+
+        .wrapper-actividad {
+            position: relative; background-color: var(--color-blanco);
+            border: 1px solid var(--color-petroleo); border-top: 6px solid var(--color-petroleo); 
+            /* MICRO-AJUSTE: Padding reducido */
+            padding: 12px 30px; box-sizing: border-box; z-index: 5;
+            box-shadow: 0 8px 25px rgba(28, 78, 101, 0.05);
+            display: flex; flex-direction: column; justify-content: flex-start; gap: 8px; height: 100%;
+            overflow-y: auto; 
+        }
+
+        .wrapper-actividad::-webkit-scrollbar { width: 6px; }
+        .wrapper-actividad::-webkit-scrollbar-thumb { background: #b0c4cf; border-radius: 4px; }
+        .wrapper-actividad::-webkit-scrollbar-thumb:hover { background: var(--color-petroleo); }
+
+        /* ==========================================================================
+           CABECERA
+           ========================================================================== */
+        .header-actividad {
+            border-bottom: 1px dashed rgba(28, 78, 101, 0.2);
+            padding-bottom: 5px; flex-shrink: 0; 
+        }
+
+        .instruccion-principal {
+            font-family: var(--fuente-lectura); font-size: 0.95rem; color: var(--color-texto-cuerpo); 
+            margin: 0; line-height: 1.4; text-align: justify; 
+        }
+
+        /* ==========================================================================
+           ÁREA INTERACTIVA (60/40)
+           ========================================================================== */
+        .area-trabajo {
+            display: grid;
+            grid-template-columns: 1.3fr 0.9fr;
+            gap: 20px; /* Reducido un poco más */
+            flex-grow: 1;
+            align-items: stretch; 
+        }
+
+        /* COLUMNA IZQUIERDA: RELATO */
+        .columna-relato {
+            background-color: #FDFBF7;
+            /* MICRO-AJUSTE: Padding interno */
+            padding: 10px 18px; 
+            border-left: 4px solid var(--color-coral);
+            border-radius: 0 6px 6px 0;
+            box-shadow: inset 4px 0 10px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .parrafo-relato {
+            font-family: var(--fuente-lectura);
+            font-size: 0.9rem; /* Letra ajustada */
+            line-height: 1.35;
+            color: var(--color-texto-cuerpo);
+            margin: 0 0 6px 0; /* Márgenes ajustados */
+            text-align: justify;
+        }
+        .parrafo-relato:last-child { margin-bottom: 0; }
+        
+        .marca-numero {
+            display: inline-flex; justify-content: center; align-items: center;
+            width: 18px; height: 18px; background-color: var(--color-petroleo);
+            color: var(--color-blanco); border-radius: 50%; font-size: 0.7rem;
+            font-weight: bold; margin-right: 6px; vertical-align: middle;
+        }
+
+        /* COLUMNA DERECHA: ORDENAMIENTO */
+        .columna-ordenamiento {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* MICRO-AJUSTE: Menos espacio entre bloques */
+            gap: 5px; 
+            width: 100%;
+        }
+
+        .bloque-sortable {
+            display: flex;
+            align-items: center;
+            background-color: var(--color-blanco);
+            border: 2px solid rgba(28, 78, 101, 0.15);
+            border-radius: 6px;
+            /* MICRO-AJUSTE: Bloques más finos */
+            padding: 6px 12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+
+        .bloque-sortable:hover { border-color: rgba(28, 78, 101, 0.4); }
+
+        .numero-posicion {
+            font-family: var(--fuente-titulos); font-size: 1.2rem; color: var(--color-hielo);
+            font-weight: 700; margin-right: 12px; width: 18px; text-align: center;
+        }
+
+        .info-bloque { flex-grow: 1; }
+
+        .titulo-etapa {
+            font-family: var(--fuente-titulos); font-size: 0.9rem; color: var(--color-petroleo); margin: 0 0 1px 0;
+        }
+
+        .desc-etapa {
+            font-family: var(--fuente-lectura); font-size: 0.75rem; color: var(--color-texto-cuerpo); margin: 0; line-height: 1.2;
+        }
+
+        .controles-mover {
+            display: flex; 
+            flex-direction: row; 
+            gap: 6px;
+            margin-left: 10px;
+        }
+
+        .btn-mover {
+            background-color: var(--color-hielo); border: none; 
+            width: 24px; height: 24px; /* Botones más compactos */
+            border-radius: 4px; cursor: pointer; display: flex; justify-content: center; align-items: center;
+            color: var(--color-petroleo); transition: all 0.2s ease;
+        }
+
+        .btn-mover:hover:not(:disabled) { background-color: var(--color-coral); color: var(--color-blanco); }
+        .btn-mover:disabled { opacity: 0.3; cursor: not-allowed; }
+        .btn-mover svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+
+        /* ==========================================================================
+           BOTÓN COMPROBAR EN BARRA DE NAVEGACIÓN
+           ========================================================================== */
+        .btn-comprobar-nav {
+            background-color: var(--color-petroleo); color: var(--color-blanco);
+            font-family: var(--fuente-lectura); font-weight: 600; font-size: 1.05rem;
+            border: none; padding: 12px 35px; border-radius: 6px; cursor: pointer;
+            transition: all 0.2s ease; box-shadow: 0 4px 15px rgba(28, 78, 101, 0.2);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .btn-comprobar-nav:hover:not(:disabled) { background-color: #123648; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(28, 78, 101, 0.3); }
+        .btn-comprobar-nav.completado { background-color: #4CAF50 !important; color: white !important; box-shadow: none !important; cursor: default !important; transform: none !important;}
+
+        /* ==========================================================================
+           MODAL DE FEEDBACK 
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(28, 78, 101, 0.7); backdrop-filter: blur(4px);
+            z-index: 100; display: flex; justify-content: center; align-items: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .modal-overlay.activo { opacity: 1; visibility: visible; }
+
+        .modal-caja {
+            background-color: var(--color-blanco); width: 100%; max-width: 500px; padding: 40px;
+            position: relative; transform: translateY(30px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid var(--color-petroleo); box-shadow: 12px 12px 0 rgba(28, 78, 101, 0.15); display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .modal-overlay.activo .modal-caja { transform: translateY(0); }
+
+        .modal-caja.exito { border-top: 8px solid #4CAF50; }
+        .modal-caja.alerta { border-top: 8px solid #FF9800; }
+
+        .btn-cerrar-cruz {
+            position: absolute; top: 15px; right: 15px; background: transparent; border: none;
+            cursor: pointer; color: var(--color-petroleo); transition: color 0.2s ease; padding: 5px; display: flex; justify-content: center; align-items: center;
+        }
+        .btn-cerrar-cruz:hover { color: var(--color-coral); }
+        .btn-cerrar-cruz svg { width: 24px; height: 24px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;}
+
+        .icono-modal { width: 48px; height: 48px; margin-bottom: 15px; }
+        .modal-caja.exito .icono-modal { fill: none; stroke: #4CAF50; stroke-width: 2; }
+        .modal-caja.alerta .icono-modal { fill: none; stroke: #FF9800; stroke-width: 2; }
+
+        .titulo-modal { font-family: var(--fuente-titulos); font-size: 1.5rem; color: var(--color-petroleo); margin: 0 0 10px 0; }
+        .texto-modal { font-family: var(--fuente-lectura); font-size: 1.05rem; line-height: 1.5; color: var(--color-texto-cuerpo); margin: 0 0 25px 0; font-weight: 300; }
+        .texto-modal em, .texto-modal strong { font-weight: 600; color: var(--color-petroleo); font-style: normal; }
+
+        .btn-accion-modal {
+            background-color: var(--color-petroleo); color: var(--color-blanco); font-family: var(--fuente-lectura);
+            font-weight: 600; font-size: 1rem; border: none; padding: 12px 30px; border-radius: 4px; cursor: pointer; transition: background 0.2s ease;
+        }
+        .btn-accion-modal:hover { background-color: #123648; }
+    </style>
+</head>
+<body>
+
+    <main class="diapositiva-marco transicion-diapositiva">
+        <div class="miscelanea-borde-superior"></div>
+
+        <header class="encabezado-fijo" style="padding-bottom: 5px;">
+            <h2>Actividad 2: Estructurando la Aventura</h2>
+        </header>
+
+        <section class="zona-contenido-fija">
+            <div class="envoltura-centrada">
+                
+                <div class="contenedor-editorial-actividad">
+                    <div class="trama-puntos-esquina"></div>
+                    <div class="offset-sombra-editorial"></div>
+                    
+                    <div class="wrapper-actividad">
+                        
+                        <div class="header-actividad">
+                            <p class="instruccion-principal">
+                                Leé la historia de Elara. Usá las flechas de los bloques para <strong>ordenar cronológicamente las 4 etapas del Camino del Héroe</strong> en la columna derecha, de modo que coincidan con los párrafos de la historia.
+                            </p>
+                        </div>
+
+                        <div class="area-trabajo">
+                            
+                            <!-- COLUMNA IZQUIERDA: EL MICRORRELATO -->
+                            <div class="columna-relato">
+                                <p class="parrafo-relato"><span class="marca-numero">1</span> Hace mucho tiempo, en un valle tranquilo, la joven Elara vivía cuidando los rebaños de su familia, sin conocer nada más allá de las montañas.</p>
+                                <p class="parrafo-relato"><span class="marca-numero">2</span> Una tarde, un anciano le entregó un mapa y le rogó que recuperara la Gema del Sol. Elara tomó su arco y cruzó la frontera hacia el bosque prohibido.</p>
+                                <p class="parrafo-relato"><span class="marca-numero">3</span> En lo profundo de una cueva oscura, tuvo que enfrentarse a una bestia de sombras, arriesgando su propia vida para arrebatarle la gema.</p>
+                                <p class="parrafo-relato"><span class="marca-numero">4</span> Tras vencer, Elara regresó a su valle. La gente la recibió con honores; ya no era una simple pastora, sino la nueva guardiana de su pueblo.</p>
+                            </div>
+
+                            <!-- COLUMNA DERECHA: LOS BLOQUES PARA ORDENAR -->
+                            <div class="columna-ordenamiento" id="listaBloques">
+                                <!-- Se inyectan con JS -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- NAVEGACIÓN GLOBAL -->
+        <nav class="barra-navegacion-fija" style="justify-content: space-between;">
+            <a href="pantalla7.html" class="btn-retroceso-sutil">← Volver</a>
+            
+            <button id="btnComprobar" class="btn-comprobar-nav">
+                Comprobar respuestas
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </button>
+        </nav>
+
+        <!-- MODAL DE FEEDBACK -->
+        <div class="modal-overlay" id="modalFeedback">
+            <div class="modal-caja" id="cajaFeedbackInterna">
+                <button class="btn-cerrar-cruz" id="btnCerrarCruz" aria-label="Cerrar ventana">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+
+                <svg class="icono-modal" id="iconoFeedback" viewBox="0 0 24 24"></svg>
+                <h3 class="titulo-modal" id="tituloFeedback"></h3>
+                <p class="texto-modal" id="textoFeedback"></p>
+                
+                <button class="btn-accion-modal" id="btnAccionModal"></button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ORDEN CORRECTO: status_quo, partida, crisis, retorno
+            const datosEtapas = [
+                { id: 'crisis', titulo: 'La Crisis', desc: 'Enfrentamiento final y mayor peligro.' },
+                { id: 'status_quo', titulo: 'Status Quo', desc: 'El mundo ordinario y la vida normal.' },
+                { id: 'retorno', titulo: 'Retorno', desc: 'Regreso al hogar con una transformación.' },
+                { id: 'partida', titulo: 'Partida', desc: 'El llamado a la aventura y cruce del umbral.' }
+            ];
+
+            const contenedor = document.getElementById('listaBloques');
+            
+            function renderizarBloques() {
+                contenedor.innerHTML = '';
+                datosEtapas.forEach((etapa, index) => {
+                    const esPrimero = index === 0;
+                    const esUltimo = index === datosEtapas.length - 1;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'bloque-sortable';
+                    div.dataset.id = etapa.id;
+                    div.innerHTML = `
+                        <div class="numero-posicion">${index + 1}</div>
+                        <div class="info-bloque">
+                            <h4 class="titulo-etapa">${etapa.titulo}</h4>
+                            <p class="desc-etapa">${etapa.desc}</p>
+                        </div>
+                        <div class="controles-mover">
+                            <button class="btn-mover btn-up" data-index="${index}" ${esPrimero ? 'disabled' : ''} aria-label="Subir">
+                                <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"></polyline></svg>
+                            </button>
+                            <button class="btn-mover btn-down" data-index="${index}" ${esUltimo ? 'disabled' : ''} aria-label="Bajar">
+                                <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                        </div>
+                    `;
+                    contenedor.appendChild(div);
+                });
+
+                document.querySelectorAll('.btn-up').forEach(btn => {
+                    btn.addEventListener('click', (e) => moverItem(parseInt(e.currentTarget.dataset.index), -1));
+                });
+                document.querySelectorAll('.btn-down').forEach(btn => {
+                    btn.addEventListener('click', (e) => moverItem(parseInt(e.currentTarget.dataset.index), 1));
+                });
+            }
+
+            function moverItem(index, direccion) {
+                if(document.getElementById('btnComprobar').classList.contains('completado')) return; 
+
+                const nuevoIndex = index + direccion;
+                const temp = datosEtapas[index];
+                datosEtapas[index] = datosEtapas[nuevoIndex];
+                datosEtapas[nuevoIndex] = temp;
+                renderizarBloques();
+            }
+
+            renderizarBloques(); 
+
+            // ==========================================
+            // Lógica de Comprobación y Feedback
+            // ==========================================
+            const btnComprobar = document.getElementById('btnComprobar');
+            const modal = document.getElementById('modalFeedback');
+            const cajaInterna = document.getElementById('cajaFeedbackInterna');
+            const btnCerrarCruz = document.getElementById('btnCerrarCruz');
+            const iconoFeedback = document.getElementById('iconoFeedback');
+            const tituloFeedback = document.getElementById('tituloFeedback');
+            const textoFeedback = document.getElementById('textoFeedback');
+            const btnAccionModal = document.getElementById('btnAccionModal');
+
+            const svgExito = '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>';
+            const svgAlerta = '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>';
+
+            btnComprobar.addEventListener('click', () => {
+                if(btnComprobar.classList.contains('completado')) return;
+
+                const ordenActual = datosEtapas.map(e => e.id);
+                const ordenCorrecto = ['status_quo', 'partida', 'crisis', 'retorno'];
+                
+                cajaInterna.classList.remove('exito', 'alerta');
+
+                if (JSON.stringify(ordenActual) === JSON.stringify(ordenCorrecto)) {
+                    cajaInterna.classList.add('exito');
+                    iconoFeedback.innerHTML = svgExito;
+                    tituloFeedback.innerText = '¡Estructura Perfecta!';
+                    textoFeedback.innerHTML = `Has comprendido el <strong>Monomito</strong>. Todo héroe parte de su vida normal, cruza el umbral a lo desconocido, enfrenta su mayor crisis y regresa transformado.`;
+                    
+                    btnAccionModal.style.display = 'none'; 
+                    btnComprobar.innerHTML = 'Actividad Completada';
+                    btnComprobar.classList.add('completado');
+                    document.querySelectorAll('.btn-mover').forEach(btn => btn.disabled = true);
+                } 
+                else {
+                    btnAccionModal.style.display = 'block';
+                    btnAccionModal.innerText = 'Corregir orden';
+                    cajaInterna.classList.add('alerta');
+                    iconoFeedback.innerHTML = svgAlerta;
+                    tituloFeedback.innerText = 'Hay algo fuera de lugar...';
+
+                    if (ordenActual[0] !== 'status_quo') {
+                        textoFeedback.innerHTML = `Analicemos el <strong>Párrafo 1</strong>: Elara vivía tranquila cuidando sus rebaños en el valle. ¿Cómo se le llama a esa etapa donde la historia comienza en el mundo ordinario?`;
+                    } else if (ordenActual[3] !== 'retorno') {
+                        textoFeedback.innerHTML = `Analicemos el <strong>Párrafo 4</strong>: Elara regresa a su valle convertida en guardiana. El ciclo del héroe siempre termina cuando este vuelve transformado. ¡Ubicá el bloque correcto al final!`;
+                    } else if (ordenActual[1] !== 'partida' || ordenActual[2] !== 'crisis') {
+                        textoFeedback.innerHTML = `El principio y el fin están bien. Pero revisemos el <strong>Párrafo 2 y 3</strong>: ¿Qué sucede primero? ¿El héroe cruza la frontera hacia el peligro o enfrenta a la bestia de las sombras?`;
+                    } else {
+                        textoFeedback.innerHTML = `Revisá las etapas con cuidado y volvé a intentarlo. Recordá la forma circular del viaje de Joseph Campbell.`;
+                    }
+                }
+
+                modal.classList.add('activo');
+            });
+
+            btnCerrarCruz.addEventListener('click', () => { modal.classList.remove('activo'); });
+            btnAccionModal.addEventListener('click', () => { modal.classList.remove('activo'); });
+        });
+    </script>
+</body>
+</html>
